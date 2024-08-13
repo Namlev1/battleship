@@ -3,6 +3,48 @@
     src: url("../../assets/fonts/Helvetica Bold Condensed/Helvetica Bold Condensed.otf");
 }
 
-p{
-    font-family: Header;
+@font-face {
+    font-family: Inconsolata;
+    src: url("../../assets/fonts/Inconsolata/Inconsolata-VariableFont_wdth,wght.ttf");
+}
+
+:root {
+    --gray-ship: #D1D2DE;
+    --gray: #717C96;
+    --red: #FF0055;
+    --light-blue: rgba(97, 198, 255, 0.2);
+    --light-gray: rgba(157, 157, 157, 0.20);
+    --grid-font: rgba(113, 124, 150, 0.7);
+    --background: #ffffff;
+    --header-background: #f5f5f5;
+    font-size: 40px;
+}
+
+p {
+    margin: 0;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background-color: var(--header-background);
+}
+
+.header-text {
+    font-family: Header, sans-serif;
+}
+
+#github {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    font-family: Inconsolata;
+    font-weight: 350;
+    font-size: 0.5rem;
+}
+
+#github > a > img {
+    width: 35px;
 }
