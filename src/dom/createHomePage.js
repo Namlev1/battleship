@@ -29,6 +29,34 @@ const addHeader = () => {
   header.appendChild(github)
 }
 
+const addMain = () => {
+  const main = document.querySelector('#main')
+  const gameGrid = document.createElement('div')
+  gameGrid.id = 'game-grid'
+
+  const playerDiv = document.createElement('div')
+  playerDiv.classList.add('game-panel')
+  playerDiv.classList.add('player')
+  const enemyDiv = document.createElement('div')
+  enemyDiv.classList.add('game-panel')
+  enemyDiv.classList.add('enemy')
+
+  const fleetBanner = document.createElement('button')
+  fleetBanner.disabled = true
+  fleetBanner.textContent = 'YOUR FLEET'
+
+  const enemyBanner = document.createElement('button')
+  enemyBanner.disabled = true
+  enemyBanner.textContent = 'OPPONENT'
+
+  playerDiv.appendChild(fleetBanner)
+  enemyDiv.appendChild(enemyBanner)
+  gameGrid.appendChild(playerDiv)
+  gameGrid.appendChild(enemyDiv)
+  main.appendChild(gameGrid)
+}
+
 export default () => {
   addHeader()
+  addMain()
 }

@@ -8,6 +8,11 @@
     src: url("../../assets/fonts/Inconsolata/Inconsolata-VariableFont_wdth,wght.ttf");
 }
 
+@font-face {
+    font-family: futura;
+    src: url("../../assets/fonts/futura/Futura Heavy font.ttf");
+}
+
 :root {
     --gray-ship: #D1D2DE;
     --gray: #717C96;
@@ -15,9 +20,18 @@
     --light-blue: rgba(97, 198, 255, 0.2);
     --light-gray: rgba(157, 157, 157, 0.20);
     --grid-font: rgba(113, 124, 150, 0.7);
+    --grid-devide: rgba(113, 124, 150, 0.4);
     --background: #ffffff;
     --header-background: #f5f5f5;
     font-size: 40px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
 }
 
 p {
@@ -47,4 +61,57 @@ p {
 
 #github > a > img {
     width: 35px;
+}
+
+#main {
+    background-color: var(--background);
+    padding: 1rem 2rem;
+    flex-grow: 1;
+}
+
+#game-grid {
+    width: 100%;
+    height: 100%;
+    background-color: var(--grid-devide);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+}
+
+#game-grid > div {
+    background-color: var(--background);
+}
+
+.player {
+    padding-right: 3rem;
+}
+
+.enemy {
+    padding-left: 3rem;
+}
+
+.game-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-panel > button {
+    appearance: none;
+    font-family: futura;
+    font-size: .7rem;
+    letter-spacing: .8ch;
+    color: var(--background);
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0;
+}
+
+.player > button {
+    background-color: var(--red);
+}
+
+.enemy > button {
+    background-color: var(--gray);
 }
