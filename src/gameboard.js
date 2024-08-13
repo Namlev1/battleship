@@ -57,9 +57,9 @@ export default class Gameboard {
     this.shipCount += 1
   }
 
-  place(coords, ship, verticle = false) {
+  place(coords, ship, vertical = false) {
     const [x, y] = coords
-    if (verticle) return this.#placeVertically(x, y, ship)
+    if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)
   }
 
