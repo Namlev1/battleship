@@ -58,7 +58,7 @@ test('Shoot empty board', () => {
   gameBoard.receiveAttack([0, 0])
   gameBoard.receiveAttack([1, 0])
   gameBoard.receiveAttack([2, 0])
-  expect(gameBoard.missedCount).toBe(3)
+  expect(gameBoard.missCount).toBe(3)
 })
 
 test('Both missed and hit attacks count', () => {
@@ -66,7 +66,7 @@ test('Both missed and hit attacks count', () => {
   gameBoard.receiveAttack([0, 0])
   gameBoard.receiveAttack([1, 1])
   gameBoard.receiveAttack([2, 2])
-  expect(gameBoard.missedCount).toBe(2)
+  expect(gameBoard.missCount).toBe(2)
 })
 
 test('All ships are sunk', () => {
