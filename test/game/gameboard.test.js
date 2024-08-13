@@ -1,5 +1,5 @@
-import Gameboard from '../src/gameboard'
-import Ship from '../src/ship'
+import Gameboard from '../../src/game/gameboard'
+import Ship from '../../src/game/ship'
 
 let gameBoard
 let ship

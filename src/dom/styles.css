@@ -1,0 +1,8 @@
+@font-face {
+    font-family: Header;
+    src: url("../../assets/fonts/Helvetica Bold Condensed/Helvetica Bold Condensed.otf");
+}
+
+p{
+    font-family: Header;
+}

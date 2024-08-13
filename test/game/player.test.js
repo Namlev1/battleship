@@ -1,5 +1,5 @@
-import Player from '../src/player'
-import Gameboard from '../src/gameboard'
+import Player from '../../src/game/player'
+import Gameboard from '../../src/game/gameboard'
 
 let player
 let board
