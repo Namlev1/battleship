@@ -70,6 +70,67 @@ const createBoard = className => {
   return board
 }
 
+function addShipDots(ship, count) {
+  while (count) {
+    const dot = document.createElement('div')
+    dot.classList.add('ship-dot')
+    ship.appendChild(dot)
+    count--
+  }
+}
+
+function createPlayerShips() {
+  const fiveField = document.createElement('div')
+  fiveField.classList.add('ship')
+  fiveField.classList.add('five-field')
+  fiveField.dataset.shipId = '5 player'
+  fiveField.draggable = true
+  addShipDots(fiveField, 5)
+
+  const fourField = document.createElement('div')
+  fourField.classList.add('ship')
+  fourField.classList.add('four-field')
+  fourField.dataset.shipId = '4 player'
+  fourField.draggable = true
+  addShipDots(fourField, 4)
+
+  const threeFieldA = document.createElement('div')
+  threeFieldA.classList.add('ship')
+  threeFieldA.classList.add('three-field-a')
+  threeFieldA.dataset.shipId = '3a player'
+  threeFieldA.draggable = true
+
+  const threeFieldB = document.createElement('div')
+  threeFieldB.classList.add('ship')
+  threeFieldB.classList.add('three-field-b')
+  threeFieldB.dataset.shipId = '3b player'
+  threeFieldB.draggable = true
+
+  const twoField = document.createElement('div')
+  twoField.classList.add('ship')
+  twoField.classList.add('two-field')
+  twoField.dataset.shipId = '2 player'
+  twoField.draggable = true
+
+  // return [fiveField, fourField, threeFieldA, threeFieldB, twoField]
+  return [fourField]
+}
+
+function createShipyard() {
+  const shipyard = document.createElement('div')
+  shipyard.classList.add('yard')
+
+  const name = document.createElement('p')
+  name.classList.add('name')
+  name.textContent = 'SHIPYARD'
+
+  const ships = createPlayerShips()
+
+  shipyard.appendChild(name)
+  shipyard.append(...ships)
+  return shipyard
+}
+
 const addMain = () => {
   const main = document.querySelector('#main')
   const gameGrid = document.createElement('div')
@@ -93,8 +154,11 @@ const addMain = () => {
   const playerBoard = createBoard('player-board')
   const enemyBoard = createBoard('enemy-board')
 
+  const shipyard = createShipyard()
+
   playerDiv.appendChild(fleetBanner)
   playerDiv.appendChild(playerBoard)
+  playerDiv.appendChild(shipyard)
   enemyDiv.appendChild(enemyBanner)
   enemyDiv.appendChild(enemyBoard)
   gameGrid.appendChild(playerDiv)
