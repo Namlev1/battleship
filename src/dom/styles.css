@@ -169,6 +169,7 @@ p {
 .yard > .name {
     padding-top: 10px;
     width: 50px;
+    height: 100%;
     font-family: futura;
     font-size: .5rem;
     color: var(--grid-font);
@@ -178,20 +179,26 @@ p {
     margin: 0;
 }
 
-.ship {
-    background-color: var(--gray-ship);
+.ships {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.ship-wrap {
+    position: relative;
     height: 35px;
-    display: grid;
-    align-items: center;
-    justify-items: center;
+    background-color: var(--gray-ship);
     will-change: transform;
 }
 
-.ship.four-field {
-    grid-template-columns: repeat(4, 50px);
-    border-radius: 50px;
-    border-top-right-radius: 120px 50px;
-    border-bottom-right-radius: 120px 50px;
+.ship {
+    position: absolute;
+    left: -8px;
+    top: 10px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
 }
 
 .ship-dot {
@@ -199,4 +206,65 @@ p {
     background-color: var(--gray-dot);
     width: 15px;
     aspect-ratio: 1/1;
+}
+
+.ship-wrap.two {
+    position: relative;
+    width: 95px;
+    background-color: var(--gray-ship);
+    border-radius: 50px;
+    border-top-right-radius: 120px 50px;
+    border-bottom-right-radius: 120px 50px;
+    will-change: transform;
+}
+
+.ship-wrap.two > .ship {
+    grid-template-columns: repeat(2, 50px);
+}
+
+.ship-wrap.three-a {
+    position: relative;
+    width: 142px;
+    background-color: var(--gray-ship);
+    border-radius: 50px;
+    will-change: transform;
+}
+
+.ship-wrap.three-b {
+    position: relative;
+    width: 142px;
+    background-color: var(--gray-ship);
+    border-radius: 50px;
+    border-top-right-radius: 120px 50px;
+    border-bottom-right-radius: 120px 50px;
+    will-change: transform;
+}
+
+.ship-wrap.three-a > .ship,
+.ship-wrap.three-b > .ship {
+    grid-template-columns: repeat(3, 50px);
+}
+
+.ship-wrap.four {
+    width: 190px;
+    border-radius: 50px;
+    border-top-right-radius: 120px 50px;
+    border-bottom-right-radius: 120px 50px;
+}
+
+.ship-wrap.four > .ship {
+    grid-template-columns: repeat(4, 50px);
+}
+
+
+.ship-wrap.five {
+    position: relative;
+    width: 238px;
+    background-color: var(--gray-ship);
+    border-radius: 10px;
+    will-change: transform;
+}
+
+.ship-wrap.five > .ship {
+    grid-template-columns: repeat(5, 50px);
 }
