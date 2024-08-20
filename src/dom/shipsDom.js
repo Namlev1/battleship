@@ -8,16 +8,22 @@ function addShipDots(ship, count) {
 }
 
 function createShip(className, shipId, dotsNum) {
-  const fourWrap = document.createElement('div')
-  fourWrap.classList.add('ship-wrap', className)
-  fourWrap.draggable = true
+  const shipWrap = document.createElement('div')
+  shipWrap.classList.add('ship-wrap', className)
+  shipWrap.draggable = true
+  shipWrap.addEventListener('dragstart', () =>
+    shipWrap.classList.add('dragging')
+  )
+  shipWrap.addEventListener('dragend', () =>
+    shipWrap.classList.remove('dragging')
+  )
 
-  const fourField = document.createElement('div')
-  fourField.classList.add('ship')
-  fourField.dataset.shipId = shipId
-  addShipDots(fourField, dotsNum)
-  fourWrap.appendChild(fourField)
-  return fourWrap
+  const shipField = document.createElement('div')
+  shipField.classList.add('ship')
+  shipField.dataset.shipId = shipId
+  addShipDots(shipField, dotsNum)
+  shipWrap.appendChild(shipField)
+  return shipWrap
 }
 
 function createPlayerShips() {

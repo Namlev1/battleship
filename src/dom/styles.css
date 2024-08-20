@@ -152,6 +152,10 @@ p {
     background-color: var(--blue);
 }
 
+.player .cell.dragover {
+    background-color: var(--red);
+}
+
 .enemy .cell {
     background-color: var(--grid-enemy-cell);
 }

@@ -1,6 +1,43 @@
+function getDraggedShipLength() {
+  const ship = document.querySelector('.dragging').firstChild
+  const length = Number.parseInt(ship.dataset.shipId, 10)
+  return length
+}
+
+function isCellInvalid(cell) {
+  const board = cell.parentElement
+  const childrenArr = Array.from(board.children)
+  const index = childrenArr.indexOf(cell)
+  return index % 11 === 0
+}
+
+function enterCellEventListener(e) {
+  e.target.classList.add('dragover')
+  const length = getDraggedShipLength()
+  let tmp = e.target
+  for (let i = 1; i < length; i++) {
+    if (isCellInvalid(tmp)) break
+    tmp.nextElementSibling.classList.add('dragover')
+    tmp = tmp.nextElementSibling
+  }
+}
+
+function leaveCellEventListener(e) {
+  e.target.classList.remove('dragover')
+  const length = getDraggedShipLength()
+  let tmp = e.target
+  for (let i = 1; i < length; i++) {
+    if (isCellInvalid(tmp)) break
+    tmp.nextElementSibling.classList.remove('dragover')
+    tmp = tmp.nextElementSibling
+  }
+}
+
 function addShipCell(board) {
   const cell = document.createElement('div')
   cell.classList.add('cell')
+  cell.addEventListener('dragenter', enterCellEventListener)
+  cell.addEventListener('dragleave', leaveCellEventListener)
   board.appendChild(cell)
 }
 
