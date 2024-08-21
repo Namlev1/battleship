@@ -281,3 +281,7 @@ p {
 .ship-wrap.locked {
     position: absolute;
 }
+
+.cell.locked {
+    background-color: green;
+}

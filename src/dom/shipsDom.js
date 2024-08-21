@@ -1,4 +1,4 @@
-import { isCellInvalid } from './utils'
+import { isCellInAvailable, isCellOutOfBound } from './utils'
 
 function addShipDots(ship, count) {
   while (count) {
@@ -9,31 +9,42 @@ function addShipDots(ship, count) {
   }
 }
 
-function isPositionValid(ship, cell) {
-  if (!cell) return false
+function getSurroundingCells(ship, cell) {
+  if (!cell) throw new Error('No cell is selected')
 
   const length = Number.parseInt(ship.firstChild.dataset.shipId, 10)
+  const cells = []
   let tmp = cell
-  for (let i = 1; i < length; i++) {
-    if (isCellInvalid(tmp)) {
-      return false
+  for (let i = 0; i < length; i++) {
+    if (isCellOutOfBound(tmp)) {
+      throw new Error('Invalid cell')
     }
+    if (isCellInAvailable(tmp)) {
+      throw new Error('Locked cell')
+    }
+    cells.push(tmp)
     tmp = tmp.nextElementSibling
   }
 
-  return true
+  return cells
 }
 
 function placeShipIfValid(ship, cell) {
-  if (isPositionValid(ship, cell)) {
-    const rect = cell.getBoundingClientRect()
-    const x = Math.floor(rect.left) + 8
-    const y = Math.floor(rect.top) + 6
-
-    ship.classList.add('locked')
-    ship.style.top = `${y}px`
-    ship.style.left = `${x}px`
+  try {
+    const cells = getSurroundingCells(ship, cell)
+    cells.forEach(shipCell => shipCell.classList.add('locked'))
+  } catch (e) {
+    console.log(e.message)
+    return
   }
+
+  const rect = cell.getBoundingClientRect()
+  const x = Math.floor(rect.left) + 8
+  const y = Math.floor(rect.top) + 6
+
+  ship.classList.add('locked')
+  ship.style.top = `${y}px`
+  ship.style.left = `${x}px`
 }
 
 function createShip(className, shipId, dotsNum) {

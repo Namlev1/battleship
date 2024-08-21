@@ -1,20 +1,27 @@
-import { getDraggedShipLength, isCellInvalid } from './utils'
+import {
+  getDraggedShipLength,
+  isCellInAvailable,
+  isCellOutOfBound
+} from './utils'
 
 function enterCellEventListener(e) {
-  const cells = [e.target]
+  const cells = []
   const length = getDraggedShipLength()
 
   let tmp = e.target
-  for (let i = 1; i < length; i++) {
-    if (isCellInvalid(tmp)) {
+  for (let i = 0; i < length; i++) {
+    if (isCellOutOfBound(tmp)) {
       cells.forEach(cell => cell.classList.add('invalid'))
       return
     }
 
-    cells.push(tmp.nextElementSibling)
+    cells.push(tmp)
     tmp = tmp.nextElementSibling
   }
-  cells.forEach(cell => cell.classList.add('dragover'))
+  cells.forEach(cell => {
+    cell.classList.add('dragover')
+    if (isCellInAvailable(cell)) cell.classList.add('invalid')
+  })
 }
 
 function leaveCellEventListener(e) {
