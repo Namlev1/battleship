@@ -18,6 +18,7 @@
     --gray-dot: #BCBDC8;
     --gray: #717C96;
     --red: #FF0055;
+    --soft-green: #D4EED1;
     --light-blue: rgba(97, 198, 255, 0.2);
     --blue: rgba(97, 198, 255, 0.4);
     --light-gray: rgba(157, 157, 157, 0.20);
@@ -153,6 +154,10 @@ p {
 }
 
 .player .cell.dragover {
+    background-color: var(--soft-green);
+}
+
+.player .cell.invalid {
     background-color: var(--red);
 }
 

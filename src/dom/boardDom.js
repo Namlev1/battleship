@@ -8,28 +8,35 @@ function isCellInvalid(cell) {
   const board = cell.parentElement
   const childrenArr = Array.from(board.children)
   const index = childrenArr.indexOf(cell)
-  return index % 11 === 0
+  return (index - 10) % 11 === 0
 }
 
 function enterCellEventListener(e) {
-  e.target.classList.add('dragover')
+  const cells = [e.target]
   const length = getDraggedShipLength()
+
   let tmp = e.target
   for (let i = 1; i < length; i++) {
-    if (isCellInvalid(tmp)) break
-    tmp.nextElementSibling.classList.add('dragover')
+    if (isCellInvalid(tmp)) {
+      cells.forEach(cell => cell.classList.add('invalid'))
+      return
+    }
+
+    cells.push(tmp.nextElementSibling)
     tmp = tmp.nextElementSibling
   }
+  cells.forEach(cell => cell.classList.add('dragover'))
 }
 
 function leaveCellEventListener(e) {
-  e.target.classList.remove('dragover')
   const length = getDraggedShipLength()
-  let tmp = e.target
-  for (let i = 1; i < length; i++) {
-    if (isCellInvalid(tmp)) break
-    tmp.nextElementSibling.classList.remove('dragover')
-    tmp = tmp.nextElementSibling
+  let cell = e.target
+  let i = 0
+  while (cell && i < length) {
+    cell.classList.remove('dragover')
+    cell.classList.remove('invalid')
+    cell = cell.nextElementSibling
+    i++
   }
 }
 
