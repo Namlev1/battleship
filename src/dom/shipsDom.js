@@ -1,9 +1,38 @@
+import { isCellInvalid } from './utils'
+
 function addShipDots(ship, count) {
   while (count) {
     const dot = document.createElement('div')
     dot.classList.add('ship-dot')
     ship.appendChild(dot)
     count--
+  }
+}
+
+function isPositionValid(ship, cell) {
+  if (!cell) return false
+
+  const length = Number.parseInt(ship.firstChild.dataset.shipId, 10)
+  let tmp = cell
+  for (let i = 1; i < length; i++) {
+    if (isCellInvalid(tmp)) {
+      return false
+    }
+    tmp = tmp.nextElementSibling
+  }
+
+  return true
+}
+
+function placeShipIfValid(ship, cell) {
+  if (isPositionValid(ship, cell)) {
+    const rect = cell.getBoundingClientRect()
+    const x = Math.floor(rect.left) + 8
+    const y = Math.floor(rect.top) + 6
+
+    ship.classList.add('locked')
+    ship.style.top = `${y}px`
+    ship.style.left = `${x}px`
   }
 }
 
@@ -14,9 +43,11 @@ function createShip(className, shipId, dotsNum) {
   shipWrap.addEventListener('dragstart', () =>
     shipWrap.classList.add('dragging')
   )
-  shipWrap.addEventListener('dragend', () =>
+  shipWrap.addEventListener('dragend', () => {
+    const cell = document.querySelector('.cell:hover')
+    placeShipIfValid(shipWrap, cell)
     shipWrap.classList.remove('dragging')
-  )
+  })
 
   const shipField = document.createElement('div')
   shipField.classList.add('ship')

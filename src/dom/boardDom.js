@@ -1,15 +1,4 @@
-function getDraggedShipLength() {
-  const ship = document.querySelector('.dragging').firstChild
-  const length = Number.parseInt(ship.dataset.shipId, 10)
-  return length
-}
-
-function isCellInvalid(cell) {
-  const board = cell.parentElement
-  const childrenArr = Array.from(board.children)
-  const index = childrenArr.indexOf(cell)
-  return (index - 10) % 11 === 0
-}
+import { getDraggedShipLength, isCellInvalid } from './utils'
 
 function enterCellEventListener(e) {
   const cells = [e.target]
@@ -29,8 +18,8 @@ function enterCellEventListener(e) {
 }
 
 function leaveCellEventListener(e) {
-  const length = getDraggedShipLength()
   let cell = e.target
+  const length = getDraggedShipLength()
   let i = 0
   while (cell && i < length) {
     cell.classList.remove('dragover')
