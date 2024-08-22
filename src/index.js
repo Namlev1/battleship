@@ -1,4 +1,5 @@
-import createHomePage from './dom/createHomePage'
+import { addHeader, addMain } from './dom/createHomePage'
 import './dom/styles.css'
 
-createHomePage()
+addHeader()
+addMain()

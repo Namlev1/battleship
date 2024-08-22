@@ -20,7 +20,7 @@ test('Place a ship vertically', () => {
 })
 
 test('Place out of bonds', () => {
-  expect(() => gameBoard.place([7, 0], ship)).toThrow(
+  expect(() => gameBoard.place([10, 0], ship)).toThrow(
     'Ship placed out of board bounds'
   )
 })

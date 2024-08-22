@@ -1,8 +1,8 @@
 import GithubIcon from '../../assets/img/github.png'
-import createShipyard from './shipsDom'
-import createBoard from './boardDom'
+import ShipyardDom from './shipsDom'
+import BoardDom from './boardDom'
 
-const addHeader = () => {
+export const addHeader = () => {
   const header = document.querySelector('#header')
 
   const battleship = document.createElement('p')
@@ -31,7 +31,7 @@ const addHeader = () => {
   header.appendChild(github)
 }
 
-const addMain = () => {
+export const addMain = () => {
   const main = document.querySelector('#main')
   const gameGrid = document.createElement('div')
   gameGrid.id = 'game-grid'
@@ -51,22 +51,17 @@ const addMain = () => {
   enemyBanner.disabled = true
   enemyBanner.textContent = 'OPPONENT'
 
-  const playerBoard = createBoard('player-board')
-  const enemyBoard = createBoard('enemy-board')
+  const playerBoard = new BoardDom()
+  const enemyBoard = new BoardDom()
 
-  const shipyard = createShipyard()
+  const shipyard = new ShipyardDom(playerBoard)
 
   playerDiv.appendChild(fleetBanner)
-  playerDiv.appendChild(playerBoard)
-  playerDiv.appendChild(shipyard)
+  playerDiv.appendChild(playerBoard.getDomElement())
+  playerDiv.appendChild(shipyard.getShipyard())
   enemyDiv.appendChild(enemyBanner)
-  enemyDiv.appendChild(enemyBoard)
+  enemyDiv.appendChild(enemyBoard.getDomElement())
   gameGrid.appendChild(playerDiv)
   gameGrid.appendChild(enemyDiv)
   main.appendChild(gameGrid)
-}
-
-export default () => {
-  addHeader()
-  addMain()
 }
