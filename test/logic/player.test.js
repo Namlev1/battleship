@@ -1,12 +1,12 @@
-import Player from '../../src/game/player'
-import Gameboard from '../../src/game/gameboard'
+import Player from '../../src/logic/player'
+import BoardLogic from '../../src/logic/boardLogic'
 
 let player
 let board
 
 beforeEach(() => {
   player = new Player()
-  board = new Gameboard()
+  board = new BoardLogic()
 })
 
 test('Should send receiveAttack() to owned gameboard', () => {

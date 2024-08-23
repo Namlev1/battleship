@@ -1,4 +1,4 @@
-import Ship from '../../src/game/ship'
+import Ship from '../../src/logic/ship'
 
 test('Hit a ship', () => {
   const ship = new Ship()

@@ -1,9 +1,14 @@
 class ShipyardDom {
-  constructor(boardDom) {
-    this.boardDom = boardDom
-    this.shipyard = this.#createShipyard()
+  #shipyard
+
+  #dropListener
+
+  constructor(dropListener) {
+    this.#dropListener = dropListener
+    this.#shipyard = this.#createShipyard()
   }
 
+  // eslint-disable-next-line class-methods-use-this
   #addShipDots(ship, count) {
     while (count) {
       const dot = document.createElement('div')
@@ -22,7 +27,7 @@ class ShipyardDom {
     })
     shipWrap.addEventListener('dragend', () => {
       const cell = document.querySelector('.cell:hover')
-      this.boardDom.placeShipIfValid(shipWrap, cell)
+      this.#dropListener(shipWrap, cell)
       shipWrap.classList.remove('dragging')
     })
 
@@ -67,8 +72,8 @@ class ShipyardDom {
     return shipyard
   }
 
-  getShipyard() {
-    return this.shipyard
+  getDomElement() {
+    return this.#shipyard
   }
 }
 

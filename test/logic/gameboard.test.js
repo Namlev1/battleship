@@ -1,11 +1,11 @@
-import Gameboard from '../../src/game/gameboard'
-import Ship from '../../src/game/ship'
+import BoardLogic from '../../src/logic/boardLogic'
+import Ship from '../../src/logic/ship'
 
 let gameBoard
 let ship
 
 beforeEach(() => {
-  gameBoard = new Gameboard()
+  gameBoard = new BoardLogic()
   ship = new Ship(2)
 })
 

@@ -1,28 +1,33 @@
 import Ship from './ship'
 
-export default class Gameboard {
-  SENTRY = true
+export default class BoardLogic {
+  #SENTRY = true
+  #board
+  #hitBoard
+  #ships
 
   constructor() {
     this.sideLength = 10
     this.missCount = 0
     this.shipCount = 0
     this.sunkCount = 0
-    this.board = new Array(this.sideLength)
+    this.#board = new Array(this.sideLength)
+    this.#hitBoard = new Array(this.sideLength)
     for (let i = 0; i < this.sideLength; i++) {
-      this.board[i] = new Array(this.sideLength)
+      this.#board[i] = new Array(this.sideLength)
+      this.#hitBoard[i] = new Array(this.sideLength)
     }
 
-    this.ships = []
-    this.ships.push(new Ship(2))
-    this.ships.push(new Ship(3))
-    this.ships.push(new Ship(3))
-    this.ships.push(new Ship(4))
-    this.ships.push(new Ship(5))
+    this.#ships = []
+    this.#ships.push(new Ship(2))
+    this.#ships.push(new Ship(3))
+    this.#ships.push(new Ship(3))
+    this.#ships.push(new Ship(4))
+    this.#ships.push(new Ship(5))
   }
 
   #isOccupied(x, y) {
-    return this.board[x][y]
+    return this.#board[x][y]
   }
 
   #isOutOfBounds(x, y) {
@@ -52,7 +57,7 @@ export default class Gameboard {
   #placeVertically(x, y, ship) {
     this.#throwIfInvalidVertically(ship, x, y)
     for (let i = 0; i < ship.length; i++) {
-      this.board[x][y + i] = ship
+      this.#board[x][y + i] = ship
     }
     this.shipCount += 1
   }
@@ -61,7 +66,7 @@ export default class Gameboard {
     const affectedPositions = []
     this.#throwIfInvalidHorizontally(ship, x, y)
 
-    this.#putShipOnTheGameboard(ship, x, y, affectedPositions)
+    this.#putShipOnBoard(ship, x, y, affectedPositions)
     this.#adjustAdjacentCells(x, ship, y, affectedPositions)
 
     this.shipCount += 1
@@ -81,9 +86,9 @@ export default class Gameboard {
       this.#affectBottomRow(start, end, affectedPositions, y)
   }
 
-  #putShipOnTheGameboard(ship, x, y, affectedPositions) {
+  #putShipOnBoard(ship, x, y, affectedPositions) {
     for (let i = 0; i < ship.length; i++) {
-      this.board[x + i][y] = ship
+      this.#board[x + i][y] = ship
       affectedPositions.push([x + i, y])
     }
   }
@@ -91,41 +96,43 @@ export default class Gameboard {
   #affectBottomRow(start, end, affectedPositions, y) {
     for (let i = start; i <= end; i++) {
       affectedPositions.push([i, y + 1])
-      this.board[i][y + 1] = this.SENTRY
+      this.#board[i][y + 1] = this.#SENTRY
     }
   }
 
   #affectRightCell(affectedPositions, x, ship, y) {
     affectedPositions.push([x + ship.length, y])
-    this.board[x + ship.length][y] = this.SENTRY
+    this.#board[x + ship.length][y] = this.#SENTRY
   }
 
   #affectLeftCell(affectedPositions, start, y) {
     affectedPositions.push([start, y])
-    this.board[start][y] = this.SENTRY
+    this.#board[start][y] = this.#SENTRY
   }
 
   #affectTopRow(start, end, affectedPositions, y) {
     for (let i = start; i <= end; i++) {
       affectedPositions.push([i, y - 1])
-      this.board[i][y - 1] = this.SENTRY
+      this.#board[i][y - 1] = this.#SENTRY
     }
   }
 
   place([x, y], shiplen, vertical = false) {
-    const ship = this.ships.find(findShip => findShip.length === shiplen)
+    const ship = this.#ships.find(findShip => findShip.length === shiplen)
     if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)
   }
 
   receiveAttack([x, y]) {
+    this.#hitBoard[x][y] = true
     if (this.#isOccupied(x, y)) {
-      const ship = this.board[x][y]
+      const ship = this.#board[x][y]
       ship.hit()
       if (ship.isSunk()) this.sunkCount += 1
-    } else {
-      this.missCount += 1
+      return true
     }
+
+    return false
   }
 
   isAllShipsSunk() {
@@ -145,5 +152,27 @@ export default class Gameboard {
       }
     }
     return true
+  }
+
+  placeRandomly() {
+    for (let i = 0; i < 2; i++) {
+      this.#board[i][0] = this.#ships[0]
+    }
+    for (let i = 0; i < 3; i++) {
+      this.#board[i][2] = this.#ships[1]
+    }
+    for (let i = 0; i < 3; i++) {
+      this.#board[i][4] = this.#ships[2]
+    }
+    for (let i = 0; i < 4; i++) {
+      this.#board[i][6] = this.#ships[3]
+    }
+    for (let i = 0; i < 5; i++) {
+      this.#board[i][8] = this.#ships[4]
+    }
+  }
+
+  isAvailableToHit([x, y]) {
+    return this.#hitBoard[x][y]
   }
 }

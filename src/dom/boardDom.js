@@ -1,40 +1,37 @@
 import { getDraggedShipLength } from './utils'
-import Gameboard from '../game/gameboard'
 
 export default class BoardDom {
-  #boardDom
-  #gameboard
+  #board
+  sideLength
+  enterListener
 
-  constructor(className) {
-    this.#gameboard = new Gameboard()
+  constructor(className, enterListener, sideLength) {
+    this.#board = document.createElement('div')
+    this.sideLength = sideLength
+    this.enterListener = enterListener
 
-    this.#boardDom = document.createElement('div')
-    this.#boardDom.classList.add('board')
-    this.#boardDom.classList.add(className)
+    this.#board.classList.add('board')
     const emptyCell = document.createElement('div')
-    this.#boardDom.appendChild(emptyCell)
-    this.#addCells(this.#boardDom, this.#gameboard.sideLength)
+    this.#board.appendChild(emptyCell)
+    this.#addCells(this.#board, this.sideLength)
   }
 
-  static #markShipCellsAsValid(shipLen, x, y) {
-    for (let i = 0; i < shipLen; i++) {
-      document
-        .querySelector(`[data-x="${x + i}"][data-y="${y}"]`)
-        .classList.add('dragover')
-    }
+  static clearCellsColor() {
+    const cells = this.#board.getElementsByClassName('cell')
+    cells.forEach(cell => {
+      cell.classList.remove('locked')
+    })
   }
 
-  static #markShipCellsAsInvalid(x, y, shipLen) {
+  static markShipCellsAsInvalid(x, y, shipLen) {
     const start = x
     const end = x + shipLen
     for (let i = start; i < end; i++) {
-      document
-        .querySelector(`[data-x="${i}"][data-y="${y}"]`)
-        .classList.add('invalid')
+      this.#getCell([i, y]).classList.add('invalid')
     }
   }
 
-  static #placeShipVisually(cell, shipDom) {
+  static placeShip(cell, shipDom) {
     const rect = cell.getBoundingClientRect()
     const x = Math.floor(rect.left) + 8
     const y = Math.floor(rect.top) + 6
@@ -44,48 +41,27 @@ export default class BoardDom {
     shipDom.style.left = `${x}px`
   }
 
+  markShipCellsAsValid(shipLen, x, y) {
+    for (let i = 0; i < shipLen; i++) {
+      this.#getCell([x + i, y]).classList.add('dragover')
+    }
+  }
+
   getDomElement() {
-    return this.#boardDom
+    return this.#board
   }
 
-  #markCellsToTheBorderAsInvalid(x, y) {
-    for (let i = x; i < this.#gameboard.sideLength; i++) {
-      const cell = document.querySelector(`[data-x="${i}"][data-y="${y}"]`)
-      cell.classList.add('invalid')
-    }
-  }
-
-  #enterCellEventListener(e) {
-    const shipLen = getDraggedShipLength()
-    const x = Number(e.target.dataset.x)
-    const y = Number(e.target.dataset.y)
-
-    if (!this.#gameboard.willShipFitHorizontally(shipLen, x)) {
-      this.#markCellsToTheBorderAsInvalid(x, y)
-    } else if (!this.#gameboard.isPlaceAvailableHorizontally(shipLen, x, y)) {
-      BoardDom.#markShipCellsAsInvalid(x, y, shipLen)
-    } else {
-      BoardDom.#markShipCellsAsValid(shipLen, x, y)
-    }
-  }
-
-  #leaveCellEventListener(e) {
-    let cell = e.target
-    const length = getDraggedShipLength()
-    let i = 0
-    while (cell && i < length) {
-      cell.classList.remove('dragover')
-      cell.classList.remove('invalid')
-      cell = cell.nextElementSibling
-      i++
+  markCellsToTheBorderAsInvalid(x, y) {
+    for (let i = x; i < this.sideLength; i++) {
+      this.#getCell([i, y]).classList.add('invalid')
     }
   }
 
   #addShipCell(boardDom, x, y) {
     const cell = document.createElement('div')
     cell.classList.add('cell')
-    cell.addEventListener('dragenter', this.#enterCellEventListener.bind(this))
-    cell.addEventListener('dragleave', this.#leaveCellEventListener.bind(this))
+    cell.addEventListener('dragenter', this.enterListener)
+    cell.addEventListener('dragleave', this.leaveCellEventListener)
     cell.dataset.x = x
     cell.dataset.y = y
     boardDom.appendChild(cell)
@@ -116,22 +92,35 @@ export default class BoardDom {
     }
   }
 
-  placeShipIfValid(shipDom, cell) {
-    try {
-      const x = Number(cell.dataset.x)
-      const y = Number(cell.dataset.y)
-      const shipLen = Number.parseInt(shipDom.firstChild.dataset.shipId, 10)
+  markHit([x, y]) {
+    const cell = this.#getCell([x, y])
+    cell.classList.add('hit')
+  }
 
-      const affectedPositions = this.#gameboard.place([x, y], shipLen)
-      affectedPositions.forEach(position => {
-        const [x, y] = position
-        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`)
-        cell.classList.add('locked')
-      })
-    } catch (e) {
-      console.log(e.trace)
-      return
+  markMiss([x, y]) {
+    const cell = this.#getCell([x, y])
+    cell.classList.add('miss')
+  }
+
+  #getCell([x, y]) {
+    return this.#board.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+  }
+
+  leaveCellEventListener(e) {
+    let cell = e.target
+    const length = getDraggedShipLength()
+    let i = 0
+    while (cell && i < length) {
+      cell.classList.remove('dragover')
+      cell.classList.remove('invalid')
+      cell = cell.nextElementSibling
+      i++
     }
-    BoardDom.#placeShipVisually(cell, shipDom)
+  }
+
+  markLocked(coords) {
+    coords.forEach(position => {
+      this.#getCell(position).classList.add('locked')
+    })
   }
 }
