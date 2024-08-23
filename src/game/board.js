@@ -14,10 +14,10 @@ export default class Board {
     this.#boardLogic = new BoardLogic()
     this.boardDom = new BoardDom(
       boardName,
-      this.enterCellEventListener,
+      this.enterCellEventListener.bind(this),
       this.#boardLogic.sideLength
     )
-    this.shipyardDom = new ShipyardDom(this.placeShipIfValid)
+    this.shipyardDom = new ShipyardDom(this.placeShipIfValid.bind(this))
   }
 
   clearCellsColor() {
@@ -65,7 +65,7 @@ export default class Board {
       this.boardDom.markLocked(affectedPositions)
       this.boardDom.placeShip(cell, shipDom)
     } catch (e) {
-      console.error(e.trace)
+      console.error(e.message)
     }
   }
 }

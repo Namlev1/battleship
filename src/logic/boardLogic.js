@@ -2,8 +2,11 @@ import Ship from './ship'
 
 export default class BoardLogic {
   #SENTRY = true
+
   #board
+
   #hitBoard
+
   #ships
 
   constructor() {

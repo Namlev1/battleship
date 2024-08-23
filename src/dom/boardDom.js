@@ -2,7 +2,9 @@ import { getDraggedShipLength } from './utils'
 
 export default class BoardDom {
   #board
+
   sideLength
+
   enterListener
 
   constructor(className, enterListener, sideLength) {
@@ -23,7 +25,7 @@ export default class BoardDom {
     })
   }
 
-  static markShipCellsAsInvalid(x, y, shipLen) {
+  markShipCellsAsInvalid(x, y, shipLen) {
     const start = x
     const end = x + shipLen
     for (let i = start; i < end; i++) {
@@ -31,13 +33,16 @@ export default class BoardDom {
     }
   }
 
-  static placeShip(cell, shipDom) {
+  // eslint-disable-next-line class-methods-use-this
+  placeShip(cell, shipDom) {
     const rect = cell.getBoundingClientRect()
     const x = Math.floor(rect.left) + 8
     const y = Math.floor(rect.top) + 6
 
     shipDom.classList.add('locked')
+    // eslint-disable-next-line no-param-reassign
     shipDom.style.top = `${y}px`
+    // eslint-disable-next-line no-param-reassign
     shipDom.style.left = `${x}px`
   }
 
@@ -67,12 +72,14 @@ export default class BoardDom {
     boardDom.appendChild(cell)
   }
 
+  // eslint-disable-next-line class-methods-use-this
   #addRowCell(i, boardEnd) {
     const rowNum = document.createElement('div')
     rowNum.textContent = String(i)
     boardEnd.appendChild(rowNum)
   }
 
+  // eslint-disable-next-line class-methods-use-this
   #addColumnCell(A, i, boardDom) {
     const colName = document.createElement('div')
     colName.textContent = String.fromCharCode(A + i)
@@ -106,6 +113,7 @@ export default class BoardDom {
     return this.#board.querySelector(`[data-x="${x}"][data-y="${y}"]`)
   }
 
+  // eslint-disable-next-line class-methods-use-this
   leaveCellEventListener(e) {
     let cell = e.target
     const length = getDraggedShipLength()
