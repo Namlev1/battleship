@@ -29,6 +29,10 @@ export default class BoardLogic {
     this.#ships.push(new Ship(5))
   }
 
+  isAllShipsPlaced() {
+    return this.shipCount === 5
+  }
+
   #isOccupied(x, y) {
     return this.#board[x][y]
   }

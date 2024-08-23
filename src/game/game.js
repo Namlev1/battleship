@@ -2,18 +2,21 @@ import Board from './board'
 
 export default class Game {
   #isPlayerRound = false
+
   playerBoard
+
   enemyBoard
 
   constructor() {
-    this.playerBoard = new Board('player')
+    this.playerBoard = new Board('player', this.onAllShipsPlaced.bind(this))
     this.enemyBoard = new Board('enemy')
   }
 
-  start() {
+  #start() {
     this.playerBoard.clearCellsColor()
     this.enemyBoard.placeRandomly()
     this.#isPlayerRound = true
+    console.log('starting game')
   }
 
   #getRandomCoords() {
@@ -37,5 +40,9 @@ export default class Game {
   #attackedPlayer([x, y]) {
     const isHit = this.playerBoard.receiveAttack(x, y)
     this.#isPlayerRound = true
+  }
+
+  onAllShipsPlaced() {
+    this.#start()
   }
 }

@@ -101,7 +101,8 @@ p {
     gap: 1rem;
 }
 
-.game-panel > button {
+.game-panel > button,
+.yard > button {
     appearance: none;
     font-family: futura;
     font-weight: bold;
@@ -115,8 +116,16 @@ p {
     padding: 0.5rem 0;
 }
 
-.player > button {
+.player > button,
+.yard > button {
     background-color: var(--red);
+}
+
+.yard > button {
+    align-self: center;
+    justify-self: center;
+    width: 300px;
+    margin-left: 90px;
 }
 
 .enemy > button {

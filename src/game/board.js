@@ -10,7 +10,7 @@ export default class Board {
 
   shipyardDom
 
-  constructor(boardName) {
+  constructor(boardName, onAllShipsPlaced) {
     this.#boardLogic = new BoardLogic()
     this.boardDom = new BoardDom(
       boardName,
@@ -18,6 +18,7 @@ export default class Board {
       this.#boardLogic.sideLength
     )
     this.shipyardDom = new ShipyardDom(this.placeShipIfValid.bind(this))
+    this.onAllShipsPlaced = onAllShipsPlaced
   }
 
   clearCellsColor() {
@@ -64,8 +65,19 @@ export default class Board {
       const affectedPositions = this.#boardLogic.place([x, y], shipLen)
       this.boardDom.markLocked(affectedPositions)
       this.boardDom.placeShip(cell, shipDom)
+      if (this.#boardLogic.isAllShipsPlaced()) {
+        this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
+      }
     } catch (e) {
       console.error(e.message)
     }
+  }
+
+  isAllShipsPlaced() {
+    return this.#boardLogic.isAllShipsPlaced()
+  }
+
+  showPlayButton() {
+    this.shipyardDom.showPlayButton()
   }
 }

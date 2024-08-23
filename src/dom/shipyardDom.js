@@ -75,6 +75,13 @@ class ShipyardDom {
   getDomElement() {
     return this.#shipyard
   }
+
+  showPlayButton(callback) {
+    const button = document.createElement('button')
+    button.textContent = 'PLAY'
+    button.addEventListener('click', callback)
+    this.#shipyard.appendChild(button)
+  }
 }
 
 export default ShipyardDom

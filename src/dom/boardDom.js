@@ -18,8 +18,8 @@ export default class BoardDom {
     this.#addCells(this.#board, this.sideLength)
   }
 
-  static clearCellsColor() {
-    const cells = this.#board.getElementsByClassName('cell')
+  clearCellsColor() {
+    const cells = this.#board.querySelectorAll('.cell')
     cells.forEach(cell => {
       cell.classList.remove('locked')
     })
