@@ -19,6 +19,9 @@ export default class BoardLogic {
     for (let i = 0; i < this.sideLength; i++) {
       this.#board[i] = new Array(this.sideLength)
       this.#hitBoard[i] = new Array(this.sideLength)
+      for (let j = 0; j < this.sideLength; j++) {
+        this.#hitBoard[i][j] = false
+      }
     }
 
     this.#ships = []
@@ -30,7 +33,7 @@ export default class BoardLogic {
   }
 
   isAllShipsPlaced() {
-    return this.shipCount === 5
+    return this.shipCount === this.#ships.length
   }
 
   #isOccupied(x, y) {
@@ -180,6 +183,16 @@ export default class BoardLogic {
   }
 
   isAvailableToHit([x, y]) {
-    return this.#hitBoard[x][y]
+    return !this.#hitBoard[x][y]
+  }
+
+  clearNotShipCells() {
+    for (let x = 0; x < this.sideLength; x++) {
+      for (let y = 0; y < this.sideLength; y++) {
+        if (this.#board[x][y] === true) {
+          this.#board[x][y] = false
+        }
+      }
+    }
   }
 }

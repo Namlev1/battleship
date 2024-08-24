@@ -158,7 +158,7 @@ p {
     background-color: var(--light-blue);
 }
 
-.player .cell:hover {
+.player .cell.hover {
     background-color: var(--blue);
 }
 
@@ -166,16 +166,23 @@ p {
     background-color: var(--soft-green);
 }
 
-.player .cell.invalid {
-    background-color: var(--red);
+.cell.miss,
+.enemy .cell.miss {
+    background-color: var(--grid-devide);
 }
 
 .enemy .cell {
     background-color: var(--grid-enemy-cell);
 }
 
-.enemy .cell:hover {
+.enemy .cell.hover {
     background-color: var(--grid-devide);
+}
+
+.player .cell.invalid,
+.cell.hit,
+.enemy .cell.hit {
+    background-color: var(--red);
 }
 
 .yard {

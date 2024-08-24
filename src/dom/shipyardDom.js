@@ -82,6 +82,10 @@ class ShipyardDom {
     button.addEventListener('click', callback)
     this.#shipyard.appendChild(button)
   }
+
+  hidePlayButton() {
+    this.#shipyard.querySelector('button').remove()
+  }
 }
 
 export default ShipyardDom

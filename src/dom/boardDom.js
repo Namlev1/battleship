@@ -7,10 +7,11 @@ export default class BoardDom {
 
   enterListener
 
-  constructor(className, enterListener, sideLength) {
+  constructor(className, enterListener, sideLength, onAttackReceive) {
     this.#board = document.createElement('div')
     this.sideLength = sideLength
     this.enterListener = enterListener
+    this.onAttackReceive = onAttackReceive
 
     this.#board.classList.add('board')
     const emptyCell = document.createElement('div')
@@ -67,6 +68,17 @@ export default class BoardDom {
     cell.classList.add('cell')
     cell.addEventListener('dragenter', this.enterListener)
     cell.addEventListener('dragleave', this.leaveCellEventListener)
+    cell.addEventListener('mouseover', () => {
+      if (this.enabled) cell.classList.add('hover')
+    })
+    cell.addEventListener('mouseout', () => {
+      cell.classList.remove('hover')
+    })
+    cell.addEventListener('click', () => {
+      if (this.enabled) {
+        this.onAttackReceive([x, y])
+      }
+    })
     cell.dataset.x = x
     cell.dataset.y = y
     boardDom.appendChild(cell)
@@ -130,5 +142,13 @@ export default class BoardDom {
     coords.forEach(position => {
       this.#getCell(position).classList.add('locked')
     })
+  }
+
+  enable() {
+    this.enabled = true
+  }
+
+  disable() {
+    this.enabled = false
   }
 }

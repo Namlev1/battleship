@@ -10,19 +10,20 @@ export default class Board {
 
   shipyardDom
 
-  constructor(boardName, onAllShipsPlaced) {
+  constructor(boardName, onAllShipsPlaced, onAttackReceive) {
     this.#boardLogic = new BoardLogic()
     this.boardDom = new BoardDom(
       boardName,
       this.enterCellEventListener.bind(this),
-      this.#boardLogic.sideLength
+      this.#boardLogic.sideLength,
+      onAttackReceive
     )
     this.shipyardDom = new ShipyardDom(this.placeShipIfValid.bind(this))
     this.onAllShipsPlaced = onAllShipsPlaced
   }
 
-  clearCellsColor() {
-    this.boardDom.clearCellsColor()
+  get sideLength() {
+    return this.#boardLogic.sideLength
   }
 
   placeRandomly() {
@@ -33,13 +34,9 @@ export default class Board {
     return this.#boardLogic.isAvailableToHit([x, y])
   }
 
-  receiveAttack([x, y]) {
-    const isHit = this.#boardLogic.receiveAttack([x, y])
-    if (isHit) {
-      this.boardDom.markHit([x, y])
-    } else {
-      this.boardDom.markMiss([x, y])
-    }
+  clearCellsColor() {
+    this.boardDom.clearCellsColor()
+    this.#boardLogic.clearNotShipCells()
   }
 
   enterCellEventListener(e) {
@@ -79,5 +76,27 @@ export default class Board {
 
   showPlayButton() {
     this.shipyardDom.showPlayButton()
+  }
+
+  receiveAttack([x, y]) {
+    const isHit = this.#boardLogic.receiveAttack([x, y])
+    if (isHit) {
+      this.boardDom.markHit([x, y])
+    } else {
+      this.boardDom.markMiss([x, y])
+    }
+    return isHit
+  }
+
+  hidePlayButton() {
+    this.shipyardDom.hidePlayButton()
+  }
+
+  enable() {
+    this.boardDom.enable()
+  }
+
+  disable() {
+    this.boardDom.disable()
   }
 }
