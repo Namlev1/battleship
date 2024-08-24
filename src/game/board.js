@@ -57,9 +57,9 @@ export default class Board {
     try {
       const x = Number(cell.dataset.x)
       const y = Number(cell.dataset.y)
-      const shipLen = Number.parseInt(shipDom.firstChild.dataset.shipId, 10)
+      const shipId = shipDom.firstChild.dataset.shipId.split(' ')[0]
 
-      const affectedPositions = this.#boardLogic.place([x, y], shipLen)
+      const affectedPositions = this.#boardLogic.place([x, y], shipId)
       this.boardDom.markLocked(affectedPositions)
       this.boardDom.placeShip(cell, shipDom)
       if (this.#boardLogic.isAllShipsPlaced()) {

@@ -25,11 +25,11 @@ export default class BoardLogic {
     }
 
     this.#ships = []
-    this.#ships.push(new Ship(2))
-    this.#ships.push(new Ship(3))
-    this.#ships.push(new Ship(3))
-    this.#ships.push(new Ship(4))
-    this.#ships.push(new Ship(5))
+    this.#ships.push(new Ship(2, '2'))
+    this.#ships.push(new Ship(3, '3a'))
+    this.#ships.push(new Ship(3, '3b'))
+    this.#ships.push(new Ship(4, '4'))
+    this.#ships.push(new Ship(5, '5'))
   }
 
   isAllShipsPlaced() {
@@ -127,8 +127,8 @@ export default class BoardLogic {
     }
   }
 
-  place([x, y], shiplen, vertical = false) {
-    const ship = this.#ships.find(findShip => findShip.length === shiplen)
+  place([x, y], id, vertical = false) {
+    const ship = this.#ships.find(findShip => findShip.id === id)
     if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)
   }

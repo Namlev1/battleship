@@ -6,7 +6,7 @@ let ship
 
 beforeEach(() => {
   gameBoard = new BoardLogic()
-  ship = new Ship(2)
+  ship = new Ship(2, '2')
 })
 
 test('Place a ship horizontally', () => {
