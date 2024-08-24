@@ -1,5 +1,10 @@
 import Board from './board'
-import { showRoundButton, toggleRoundButton } from '../dom/createHomePage'
+import {
+  showEnemyWon,
+  showPlayerWon,
+  showRoundButton,
+  toggleRoundButton
+} from '../dom/createHomePage'
 
 export default class Game {
   playerBoard
@@ -51,6 +56,7 @@ export default class Game {
   #attackedEnemy([x, y]) {
     const isHit = this.enemyBoard.receiveAttack([x, y])
     if (isHit) {
+      if (this.enemyBoard.isAllShipsSunk()) showPlayerWon()
       return
     }
     this.enemyBoard.disable()
@@ -62,6 +68,10 @@ export default class Game {
   #attackedPlayer([x, y]) {
     const isHit = this.playerBoard.receiveAttack([x, y])
     if (isHit) {
+      if (this.playerBoard.isAllShipsSunk()) {
+        showEnemyWon()
+        return
+      }
       this.attackRandomPlayerField()
     } else {
       this.playerBoard.disable()

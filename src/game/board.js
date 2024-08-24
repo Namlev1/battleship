@@ -74,6 +74,10 @@ export default class Board {
     return this.#boardLogic.isAllShipsPlaced()
   }
 
+  isAllShipsSunk() {
+    return this.#boardLogic.isAllShipsSunk()
+  }
+
   showPlayButton() {
     this.shipyardDom.showPlayButton()
   }

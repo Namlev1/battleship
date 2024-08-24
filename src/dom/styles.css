@@ -102,7 +102,8 @@ p {
 
 .game-panel > button,
 .yard > button,
-.round {
+.round,
+form > button {
     appearance: none;
     font-family: futura;
     font-weight: bold;
@@ -122,7 +123,8 @@ p {
 
 .player > button,
 .yard > button,
-.round.player-round {
+.round.player-round,
+dialog.player-won button {
     background-color: var(--red);
 }
 
@@ -133,7 +135,8 @@ p {
     margin-left: 90px;
 }
 
-.enemy > button {
+.enemy > button,
+dialog.enemy-won button {
     background-color: var(--gray);
 }
 
@@ -313,4 +316,33 @@ p {
     top: 100px;
     transform: translateX(-50%);
     background-color: var(--gray);
+}
+
+dialog {
+    top: -300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+
+dialog.player-won {
+    border-radius: 8px;
+}
+
+dialog > p {
+    font-family: futura;
+    font-size: .9rem;
+}
+
+dialog > form {
+    width: 100%;
+}
+
+dialog > form > button {
+    border: none;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, .35);
 }

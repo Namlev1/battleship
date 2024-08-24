@@ -73,7 +73,6 @@ export const toggleRoundButton = (() => {
 
   return () => {
     isPlayerRound = !isPlayerRound
-    console.log('toggling to ', isPlayerRound)
     const button = document.querySelector('.round')
     if (isPlayerRound) {
       button.textContent = 'Player round'
@@ -84,3 +83,29 @@ export const toggleRoundButton = (() => {
     }
   }
 })()
+
+const showDialog = (className, text) => {
+  const dialog = document.createElement('dialog')
+  dialog.classList.add(className)
+
+  const p = document.createElement('p')
+  p.textContent = text
+  const form = document.createElement('form')
+  form.method = 'dialog'
+  const button = document.createElement('button')
+  button.textContent = 'Play again'
+  button.addEventListener('click', () => window.location.reload())
+
+  const body = document.querySelector('body')
+
+  form.appendChild(button)
+  dialog.appendChild(p)
+  dialog.append(form)
+  body.appendChild(dialog)
+  dialog.showModal()
+  dialog.focus()
+}
+
+export const showEnemyWon = () => showDialog('enemy-won', 'Enemy has won!')
+
+export const showPlayerWon = () => showDialog('player-won', 'You has won!')

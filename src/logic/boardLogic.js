@@ -34,6 +34,7 @@ export default class BoardLogic {
 
   isAllShipsPlaced() {
     return this.shipCount === this.#ships.length
+    // return true
   }
 
   #isOccupied(x, y) {
@@ -146,7 +147,7 @@ export default class BoardLogic {
   }
 
   isAllShipsSunk() {
-    return this.shipCount === this.sunkCount
+    return this.sunkCount === this.#ships.length
   }
 
   willShipFitHorizontally(len, x) {
