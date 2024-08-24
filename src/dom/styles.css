@@ -306,6 +306,10 @@ dialog.enemy-won button {
     position: absolute;
 }
 
+.ship-wrap.sunk {
+    background-color: var(--gray);
+}
+
 .cell.locked {
     background-color: green;
 }

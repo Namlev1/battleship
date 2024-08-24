@@ -135,15 +135,21 @@ export default class BoardLogic {
   }
 
   receiveAttack([x, y]) {
+    let isHit = false
+    let isSunk = false
+    let shipId = null
     this.#hitBoard[x][y] = true
     if (this.#isOccupied(x, y)) {
       const ship = this.#board[x][y]
+      isHit = true
+      shipId = ship.id
       ship.hit()
-      if (ship.isSunk()) this.sunkCount += 1
-      return true
+      if (ship.isSunk()) {
+        this.sunkCount += 1
+        isSunk = true
+      }
     }
-
-    return false
+    return { isHit, isSunk, shipId }
   }
 
   isAllShipsSunk() {

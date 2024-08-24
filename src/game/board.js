@@ -83,9 +83,12 @@ export default class Board {
   }
 
   receiveAttack([x, y]) {
-    const isHit = this.#boardLogic.receiveAttack([x, y])
+    const { isHit, isSunk, shipId } = this.#boardLogic.receiveAttack([x, y])
     if (isHit) {
       this.boardDom.markHit([x, y])
+      if (isSunk) {
+        this.shipyardDom.markSunk(shipId)
+      }
     } else {
       this.boardDom.markMiss([x, y])
     }

@@ -86,6 +86,13 @@ class ShipyardDom {
   hidePlayButton() {
     this.#shipyard.querySelector('button').remove()
   }
+
+  markSunk(shipId) {
+    const shipDom = this.#shipyard.querySelector(
+      `[data-ship-id*="${shipId}"]`
+    ).parentElement
+    shipDom.classList.add('sunk')
+  }
 }
 
 export default ShipyardDom
