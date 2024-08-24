@@ -21,7 +21,7 @@ export default class Game {
     this.enemyBoard = new Board(
       'enemy',
       () => {},
-      this.#attackedEnemy.bind(this)
+      this.#playerIsAttacking.bind(this)
     )
     this.enemyBoard.disable()
   }
@@ -29,7 +29,7 @@ export default class Game {
   attackRandomPlayerField = () => {
     setTimeout(() => {
       const attackCoords = this.#getRandomCoords()
-      this.#attackedPlayer(attackCoords)
+      this.#enemyIsAttacking(attackCoords)
     }, 1000)
   }
 
@@ -53,10 +53,15 @@ export default class Game {
     return [x, y]
   }
 
-  #attackedEnemy([x, y]) {
+  #playerIsAttacking([x, y]) {
+    if (!this.enemyBoard.isAvailableToHit([x, y])) {
+      return
+    }
     const isHit = this.enemyBoard.receiveAttack([x, y])
     if (isHit) {
-      if (this.enemyBoard.isAllShipsSunk()) showPlayerWon()
+      if (this.enemyBoard.isAllShipsSunk()) {
+        showPlayerWon()
+      }
       return
     }
     this.enemyBoard.disable()
@@ -65,7 +70,7 @@ export default class Game {
     toggleRoundButton()
   }
 
-  #attackedPlayer([x, y]) {
+  #enemyIsAttacking([x, y]) {
     const isHit = this.playerBoard.receiveAttack([x, y])
     if (isHit) {
       if (this.playerBoard.isAllShipsSunk()) {
