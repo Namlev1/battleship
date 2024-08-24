@@ -58,3 +58,29 @@ export const addMain = (playerDom, enemyDom) => {
   gameGrid.appendChild(enemyDiv)
   main.appendChild(gameGrid)
 }
+
+export const showRoundButton = () => {
+  const button = document.createElement('button')
+  button.textContent = 'Player round'
+  button.classList.add('round')
+  button.classList.add('player-round')
+  const main = document.querySelector('#main')
+  main.appendChild(button)
+}
+
+export const toggleRoundButton = (() => {
+  let isPlayerRound = true
+
+  return () => {
+    isPlayerRound = !isPlayerRound
+    console.log('toggling to ', isPlayerRound)
+    const button = document.querySelector('.round')
+    if (isPlayerRound) {
+      button.textContent = 'Player round'
+      button.classList.add('player-round')
+    } else {
+      button.textContent = 'Enemy round...'
+      button.classList.remove('player-round')
+    }
+  }
+})()

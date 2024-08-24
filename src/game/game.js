@@ -1,4 +1,5 @@
 import Board from './board'
+import { showRoundButton, toggleRoundButton } from '../dom/createHomePage'
 
 export default class Game {
   playerBoard
@@ -20,12 +21,20 @@ export default class Game {
     this.enemyBoard.disable()
   }
 
+  attackRandomPlayerField = () => {
+    setTimeout(() => {
+      const attackCoords = this.#getRandomCoords()
+      this.#attackedPlayer(attackCoords)
+    }, 1000)
+  }
+
   #start() {
     this.playerBoard.hidePlayButton()
     this.playerBoard.clearCellsColor()
     this.enemyBoard.placeRandomly()
     this.enemyBoard.enable()
     this.playerBoard.disable()
+    showRoundButton()
   }
 
   #getRandomCoords() {
@@ -47,20 +56,18 @@ export default class Game {
     this.enemyBoard.disable()
     this.playerBoard.enable()
     this.attackRandomPlayerField()
-  }
-
-  attackRandomPlayerField() {
-    const attackCoords = this.#getRandomCoords()
-    this.#attackedPlayer(attackCoords)
+    toggleRoundButton()
   }
 
   #attackedPlayer([x, y]) {
     const isHit = this.playerBoard.receiveAttack([x, y])
     if (isHit) {
       this.attackRandomPlayerField()
+    } else {
+      this.playerBoard.disable()
+      this.enemyBoard.enable()
+      toggleRoundButton()
     }
-    this.playerBoard.disable()
-    this.enemyBoard.enable()
   }
 
   onAllShipsPlaced() {

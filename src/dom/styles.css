@@ -34,7 +34,6 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 100vw;
     margin: 0;
 }
 
@@ -102,7 +101,8 @@ p {
 }
 
 .game-panel > button,
-.yard > button {
+.yard > button,
+.round {
     appearance: none;
     font-family: futura;
     font-weight: bold;
@@ -116,8 +116,13 @@ p {
     padding: 0.5rem 0;
 }
 
+.round {
+    width: 200px;
+}
+
 .player > button,
-.yard > button {
+.yard > button,
+.round.player-round {
     background-color: var(--red);
 }
 
@@ -300,4 +305,12 @@ p {
 
 .cell.locked {
     background-color: green;
+}
+
+.round {
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    transform: translateX(-50%);
+    background-color: var(--gray);
 }
