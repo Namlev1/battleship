@@ -15,7 +15,7 @@ export default class PlayerBoardDom extends BoardDom {
   // eslint-disable-next-line class-methods-use-this
   placeShip(cell, shipDom) {
     const rect = cell.getBoundingClientRect()
-    const x = Math.floor(rect.left) + 8
+    const x = Math.floor(rect.left) + 6
     const y = Math.floor(rect.top) + 6
 
     shipDom.classList.add('locked')

@@ -32,6 +32,11 @@ class ShipyardDom {
       this.dropListener(shipWrap, cell)
       shipWrap.classList.remove('dragging')
     })
+    shipWrap.addEventListener('click', () => {
+      if (shipWrap.classList.contains('locked')) {
+        shipWrap.classList.toggle('vertical')
+      }
+    })
 
     const shipField = document.createElement('div')
     shipField.classList.add('ship')

@@ -225,18 +225,33 @@ dialog.enemy-won button {
 
 .ship-wrap {
     position: relative;
-    height: 35px;
     background-color: var(--gray-ship);
     will-change: transform;
 }
 
-.ship {
+.ship-wrap:not(.vertical) {
+    height: 35px;
+}
+
+.ship-wrap.vertical {
+    width: 35px;
+}
+
+.ship-wrap > .ship {
     position: absolute;
-    left: -8px;
-    top: 10px;
     display: grid;
     align-items: center;
     justify-items: center;
+}
+
+.ship-wrap:not(.vertical) > .ship {
+    left: -8px;
+    top: 10px;
+}
+
+.ship-wrap.vertical > .ship {
+    left: 10px;
+    top: -8px;
 }
 
 .ship-dot {
@@ -246,65 +261,101 @@ dialog.enemy-won button {
     aspect-ratio: 1/1;
 }
 
-.ship-wrap.two {
-    position: relative;
+.ship-wrap.two:not(.vertical) {
     width: 95px;
-    background-color: var(--gray-ship);
     border-radius: 50px;
     border-top-right-radius: 120px 50px;
     border-bottom-right-radius: 120px 50px;
-    will-change: transform;
 }
 
-.ship-wrap.two > .ship {
+.ship-wrap.two.vertical {
+    height: 95px;
+    border-radius: 50px;
+    border-bottom-left-radius: 50px 120px;
+    border-bottom-right-radius: 50px 120px;
+}
+
+.ship-wrap.two:not(.vertical) > .ship {
     grid-template-columns: repeat(2, 50px);
 }
 
-.ship-wrap.three-a {
-    position: relative;
-    width: 142px;
-    background-color: var(--gray-ship);
-    border-radius: 50px;
-    will-change: transform;
+.ship-wrap.two.vertical > .ship {
+    grid-template-rows: repeat(2, 50px);
 }
 
-.ship-wrap.three-b {
-    position: relative;
+.ship-wrap.three-a:not(.vertical) {
     width: 142px;
-    background-color: var(--gray-ship);
+    border-radius: 50px;
+}
+
+.ship-wrap.three-a.vertical {
+    height: 142px;
+    border-radius: 50px;
+}
+
+.ship-wrap.three-b:not(.vertical) {
+    width: 142px;
     border-radius: 50px;
     border-top-right-radius: 120px 50px;
     border-bottom-right-radius: 120px 50px;
-    will-change: transform;
 }
 
-.ship-wrap.three-a > .ship,
-.ship-wrap.three-b > .ship {
+.ship-wrap.three-b.vertical {
+    height: 142px;
+    border-radius: 50px;
+    border-bottom-left-radius: 50px 120px;
+    border-bottom-right-radius: 50px 120px;
+}
+
+.ship-wrap.three-a:not(.vertical) > .ship,
+.ship-wrap.three-b:not(.vertical) > .ship {
     grid-template-columns: repeat(3, 50px);
 }
 
-.ship-wrap.four {
+
+.ship-wrap.three-a.vertical > .ship,
+.ship-wrap.three-b.vertical > .ship {
+    grid-template-rows: repeat(3, 50px);
+}
+
+.ship-wrap.four:not(.vertical) {
     width: 190px;
     border-radius: 50px;
     border-top-right-radius: 120px 50px;
     border-bottom-right-radius: 120px 50px;
 }
 
-.ship-wrap.four > .ship {
+.ship-wrap.four.vertical {
+    height: 190px;
+    border-radius: 50px;
+    border-bottom-left-radius: 50px 120px;
+    border-bottom-right-radius: 50px 120px;
+}
+
+.ship-wrap.four:not(.vertical) > .ship {
     grid-template-columns: repeat(4, 50px);
 }
 
-
-.ship-wrap.five {
-    position: relative;
-    width: 238px;
-    background-color: var(--gray-ship);
-    border-radius: 10px;
-    will-change: transform;
+.ship-wrap.four.vertical > .ship {
+    grid-template-rows: repeat(4, 50px);
 }
 
-.ship-wrap.five > .ship {
+.ship-wrap.five:not(.vertical) {
+    width: 238px;
+    border-radius: 10px;
+}
+
+.ship-wrap.five.vertical {
+    height: 238px;
+    border-radius: 10px;
+}
+
+.ship-wrap.five:not(.vertical) > .ship {
     grid-template-columns: repeat(5, 50px);
+}
+
+.ship-wrap.five.vertical > .ship {
+    grid-template-rows: repeat(5, 50px);
 }
 
 .ship-wrap.locked {
