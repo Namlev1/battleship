@@ -117,6 +117,11 @@ form > button {
     padding: 0.5rem 0;
 }
 
+.game-panel > button {
+    margin-left: .4rem;
+    width: 95%;
+}
+
 .round {
     width: 200px;
 }
