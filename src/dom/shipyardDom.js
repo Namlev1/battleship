@@ -1,11 +1,13 @@
 class ShipyardDom {
-  #shipyard
+  shipyard
 
-  #dropListener
+  dropListener
 
   constructor(dropListener) {
-    this.#dropListener = dropListener
-    this.#shipyard = this.#createShipyard()
+    if (new.target === ShipyardDom) {
+      throw new Error('Cannot instantiate an abstract class.')
+    }
+    this.dropListener = dropListener
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -27,7 +29,7 @@ class ShipyardDom {
     })
     shipWrap.addEventListener('dragend', () => {
       const cell = document.querySelector('.cell:hover')
-      this.#dropListener(shipWrap, cell)
+      this.dropListener(shipWrap, cell)
       shipWrap.classList.remove('dragging')
     })
 
@@ -39,12 +41,12 @@ class ShipyardDom {
     return shipWrap
   }
 
-  #createPlayerShips() {
-    const fiveShip = this.#createShip('five', '5 player', 5)
-    const fourShip = this.#createShip('four', '4 player', 4)
-    const threeShipA = this.#createShip('three-a', '3a player', 3)
-    const threeShipB = this.#createShip('three-b', '3b player', 3)
-    const twoShip = this.#createShip('two', '2 player', 2)
+  #createShips(className) {
+    const fiveShip = this.#createShip('five', `5 ${className}`, 5)
+    const fourShip = this.#createShip('four', `4 ${className}`, 4)
+    const threeShipA = this.#createShip('three-a', `3a ${className}`, 3)
+    const threeShipB = this.#createShip('three-b', `3b ${className}`, 3)
+    const twoShip = this.#createShip('two', `2 ${className}`, 2)
 
     const shipsDiv = document.createElement('div')
     shipsDiv.classList.add('ships')
@@ -57,38 +59,27 @@ class ShipyardDom {
     return shipsDiv
   }
 
-  #createShipyard() {
+  createShipyard(name, id) {
     const shipyard = document.createElement('div')
     shipyard.classList.add('yard')
 
-    const name = document.createElement('p')
-    name.classList.add('name')
-    name.textContent = 'SHIPYARD'
+    const header = document.createElement('p')
+    header.classList.add('name')
+    header.textContent = name
 
-    const ships = this.#createPlayerShips()
+    const ships = this.#createShips(id)
 
-    shipyard.appendChild(name)
+    shipyard.appendChild(header)
     shipyard.append(ships)
     return shipyard
   }
 
   getDomElement() {
-    return this.#shipyard
-  }
-
-  showPlayButton(callback) {
-    const button = document.createElement('button')
-    button.textContent = 'PLAY'
-    button.addEventListener('click', callback)
-    this.#shipyard.appendChild(button)
-  }
-
-  hidePlayButton() {
-    this.#shipyard.querySelector('button').remove()
+    return this.shipyard
   }
 
   markSunk(shipId) {
-    const shipDom = this.#shipyard.querySelector(
+    const shipDom = this.shipyard.querySelector(
       `[data-ship-id*="${shipId}"]`
     ).parentElement
     shipDom.classList.add('sunk')

@@ -1,10 +1,11 @@
-import Board from './board'
 import {
   showEnemyWon,
   showPlayerWon,
   showRoundButton,
   toggleRoundButton
 } from '../dom/createHomePage'
+import PlayerBoard from './playerBoard'
+import EnemyBoard from './enemyBoard'
 
 export default class Game {
   playerBoard
@@ -12,17 +13,9 @@ export default class Game {
   enemyBoard
 
   constructor() {
-    this.playerBoard = new Board(
-      'player',
-      this.onAllShipsPlaced.bind(this),
-      () => {}
-    )
+    this.playerBoard = new PlayerBoard(this.onAllShipsPlaced.bind(this))
     this.playerBoard.enable()
-    this.enemyBoard = new Board(
-      'enemy',
-      () => {},
-      this.#playerIsAttacking.bind(this)
-    )
+    this.enemyBoard = new EnemyBoard(this.#playerIsAttacking.bind(this))
     this.enemyBoard.disable()
   }
 

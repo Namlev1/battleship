@@ -1,66 +1,30 @@
 import { getDraggedShipLength } from './utils'
 
 export default class BoardDom {
-  #board
+  board
 
   sideLength
 
   enterListener
 
   constructor(className, enterListener, sideLength, onAttackReceive) {
-    this.#board = document.createElement('div')
+    if (new.target === BoardDom) {
+      throw new Error('Cannot instantiate an abstract class.')
+    }
+
+    this.board = document.createElement('div')
     this.sideLength = sideLength
     this.enterListener = enterListener
     this.onAttackReceive = onAttackReceive
 
-    this.#board.classList.add('board')
+    this.board.classList.add('board')
     const emptyCell = document.createElement('div')
-    this.#board.appendChild(emptyCell)
-    this.#addCells(this.#board, this.sideLength)
-  }
-
-  clearCellsColor() {
-    const cells = this.#board.querySelectorAll('.cell')
-    cells.forEach(cell => {
-      cell.classList.remove('locked')
-    })
-  }
-
-  markShipCellsAsInvalid(x, y, shipLen) {
-    const start = x
-    const end = x + shipLen
-    for (let i = start; i < end; i++) {
-      this.#getCell([i, y]).classList.add('invalid')
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  placeShip(cell, shipDom) {
-    const rect = cell.getBoundingClientRect()
-    const x = Math.floor(rect.left) + 8
-    const y = Math.floor(rect.top) + 6
-
-    shipDom.classList.add('locked')
-    // eslint-disable-next-line no-param-reassign
-    shipDom.style.top = `${y}px`
-    // eslint-disable-next-line no-param-reassign
-    shipDom.style.left = `${x}px`
-  }
-
-  markShipCellsAsValid(shipLen, x, y) {
-    for (let i = 0; i < shipLen; i++) {
-      this.#getCell([x + i, y]).classList.add('dragover')
-    }
+    this.board.appendChild(emptyCell)
+    this.#addCells(this.board, this.sideLength)
   }
 
   getDomElement() {
-    return this.#board
-  }
-
-  markCellsToTheBorderAsInvalid(x, y) {
-    for (let i = x; i < this.sideLength; i++) {
-      this.#getCell([i, y]).classList.add('invalid')
-    }
+    return this.board
   }
 
   #addShipCell(boardDom, x, y) {
@@ -112,17 +76,17 @@ export default class BoardDom {
   }
 
   markHit([x, y]) {
-    const cell = this.#getCell([x, y])
+    const cell = this.getCell([x, y])
     cell.classList.add('hit')
   }
 
   markMiss([x, y]) {
-    const cell = this.#getCell([x, y])
+    const cell = this.getCell([x, y])
     cell.classList.add('miss')
   }
 
-  #getCell([x, y]) {
-    return this.#board.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+  getCell([x, y]) {
+    return this.board.querySelector(`[data-x="${x}"][data-y="${y}"]`)
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -140,7 +104,7 @@ export default class BoardDom {
 
   markLocked(coords) {
     coords.forEach(position => {
-      this.#getCell(position).classList.add('locked')
+      this.getCell(position).classList.add('locked')
     })
   }
 
