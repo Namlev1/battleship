@@ -237,11 +237,9 @@ export default class BoardLogic {
 
   #checkRow([start, end], affectedPositions, y) {
     for (let i = start; i <= end; i++) {
-      console.log(`checking x:${i}, y:${y}`)
       if (!this.#hasNeighbourShip([i, y])) {
         affectedPositions.push([i, y])
         this.#board[i][y] = false
-        console.log(`added x:${i}, y:${y}`)
       }
     }
   }

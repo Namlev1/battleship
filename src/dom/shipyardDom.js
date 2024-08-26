@@ -23,17 +23,23 @@ class ShipyardDom {
     const shipWrap = document.createElement('div')
     shipWrap.classList.add('ship-wrap', className)
     shipWrap.draggable = true
-    shipWrap.addEventListener('dragstart', () =>
-      shipWrap.classList.add('dragging')
-    )
-    shipWrap.addEventListener('dragend', () => {
+    shipWrap.addEventListener('dragstart', () => {
       if (shipWrap.classList.contains('locked')) {
         const { x, y } = shipWrap.dataset
         const isVertical = shipWrap.classList.contains('vertical')
         this.relocateShip([x, y], shipLen, isVertical)
       }
+      shipWrap.classList.add('dragging')
+    })
+    shipWrap.addEventListener('dragend', () => {
       const cell = document.querySelector('.cell:hover')
-      this.dropListener(shipWrap, cell)
+      if (cell) {
+        this.dropListener(shipWrap, cell)
+      } else {
+        shipWrap.classList.remove('locked')
+        shipWrap.style.left = '0'
+        shipWrap.style.top = '0'
+      }
       shipWrap.classList.remove('dragging')
     })
     shipWrap.addEventListener('click', () => {

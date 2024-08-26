@@ -61,7 +61,6 @@ export default class PlayerBoard extends Board {
       shipLen,
       vertical
     )
-    console.log('affectedCells: ', affectedCells)
     this.boardDom.clearCells(affectedCells)
   }
 
