@@ -34,7 +34,6 @@ export default class BoardLogic {
 
   isAllShipsPlaced() {
     return this.shipCount === this.#ships.length
-    // return true
   }
 
   #isOccupied(x, y) {
@@ -196,10 +195,91 @@ export default class BoardLogic {
   clearNotShipCells() {
     for (let x = 0; x < this.sideLength; x++) {
       for (let y = 0; y < this.sideLength; y++) {
-        if (this.#board[x][y] === true) {
+        if (this.#board[x][y] === this.#SENTRY) {
           this.#board[x][y] = false
         }
       }
     }
+  }
+
+  #hasNeighbourShip([x, y]) {
+    const hasTopNeighbours = y !== 0
+    const hasBottomNeighbours = y !== this.sideLength - 1
+    const hasLeftNeighbours = x !== 0
+    const hasRightNeighbours = x !== this.sideLength - 1
+
+    if (hasTopNeighbours) {
+      const start = hasLeftNeighbours ? x - 1 : x
+      const end = hasRightNeighbours ? x + 1 : x
+      for (let i = start; i <= end; i++) {
+        if (this.#board[i][y - 1] instanceof Ship) {
+          return true
+        }
+      }
+    }
+    if (hasLeftNeighbours && this.#board[x - 1][y] instanceof Ship) {
+      return true
+    }
+    if (hasRightNeighbours && this.#board[x + 1][y] instanceof Ship) {
+      return true
+    }
+    if (hasBottomNeighbours) {
+      const start = hasLeftNeighbours ? x - 1 : x
+      const end = hasRightNeighbours ? x + 1 : x
+      for (let i = start; i <= end; i++) {
+        if (this.#board[i][y + 1] instanceof Ship) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  #checkRow([start, end], affectedPositions, y) {
+    for (let i = start; i <= end; i++) {
+      console.log(`checking x:${i}, y:${y}`)
+      if (!this.#hasNeighbourShip([i, y])) {
+        affectedPositions.push([i, y])
+        this.#board[i][y] = false
+        console.log(`added x:${i}, y:${y}`)
+      }
+    }
+  }
+
+  #checkCell([x, y], affectedPositions) {
+    if (!this.#hasNeighbourShip([x, y])) {
+      affectedPositions.push([x, y])
+      this.#board[x][y] = false
+    }
+  }
+
+  removeShipVertically([x, y], shipLen) {}
+
+  removeShipHorizontally([x, y], shipLen) {
+    const affectedPositions = []
+    for (let i = 0; i < shipLen; i++) {
+      this.#board[x + i][y] = false
+      affectedPositions.push([x + i, y])
+    }
+    const start = x === 0 ? x : x - 1
+    const end =
+      x + shipLen >= this.sideLength ? this.sideLength - 1 : x + shipLen
+
+    if (y > 0) this.#checkRow([start, end], affectedPositions, y - 1)
+    if (x > 0) this.#checkCell([start, y], affectedPositions)
+    if (x + shipLen < this.sideLength)
+      this.#checkCell([end, y], affectedPositions)
+    if (y + 1 < this.sideLength)
+      this.#checkRow([start, end], affectedPositions, y + 1)
+
+    return affectedPositions
+  }
+
+  removeShip(coords, shipLen, vertical) {
+    this.shipCount -= 1
+    if (vertical) {
+      return this.removeShipVertically(coords, shipLen)
+    }
+    return this.removeShipHorizontally(coords, shipLen)
   }
 }

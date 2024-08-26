@@ -1,13 +1,12 @@
 class ShipyardDom {
   shipyard
 
-  dropListener
-
-  constructor(dropListener) {
+  constructor(dropListener, relocateShip) {
     if (new.target === ShipyardDom) {
       throw new Error('Cannot instantiate an abstract class.')
     }
     this.dropListener = dropListener
+    this.relocateShip = relocateShip
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -20,14 +19,19 @@ class ShipyardDom {
     }
   }
 
-  #createShip(className, shipId, dotsNum) {
+  #createShip(className, shipId, shipLen) {
     const shipWrap = document.createElement('div')
     shipWrap.classList.add('ship-wrap', className)
     shipWrap.draggable = true
-    shipWrap.addEventListener('dragstart', () => {
+    shipWrap.addEventListener('dragstart', () =>
       shipWrap.classList.add('dragging')
-    })
+    )
     shipWrap.addEventListener('dragend', () => {
+      if (shipWrap.classList.contains('locked')) {
+        const { x, y } = shipWrap.dataset
+        const isVertical = shipWrap.classList.contains('vertical')
+        this.relocateShip([x, y], shipLen, isVertical)
+      }
       const cell = document.querySelector('.cell:hover')
       this.dropListener(shipWrap, cell)
       shipWrap.classList.remove('dragging')
@@ -41,7 +45,7 @@ class ShipyardDom {
     const shipField = document.createElement('div')
     shipField.classList.add('ship')
     shipField.dataset.shipId = shipId
-    this.#addShipDots(shipField, dotsNum)
+    this.#addShipDots(shipField, shipLen)
     shipWrap.appendChild(shipField)
     return shipWrap
   }

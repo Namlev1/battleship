@@ -5,10 +5,16 @@ export default class PlayerBoardDom extends BoardDom {
     super(className, dropShipIntoCellEventListener, sideLen, () => {})
   }
 
-  clearCellsColor() {
+  clearAllCells() {
     const cells = this.board.querySelectorAll('.cell')
     cells.forEach(cell => {
       cell.classList.remove('locked')
+    })
+  }
+
+  clearCells(coords) {
+    coords.forEach(position => {
+      this.getCell(position).classList.remove('locked')
     })
   }
 
@@ -23,6 +29,10 @@ export default class PlayerBoardDom extends BoardDom {
     shipDom.style.top = `${y}px`
     // eslint-disable-next-line no-param-reassign
     shipDom.style.left = `${x}px`
+    // eslint-disable-next-line no-param-reassign
+    shipDom.dataset.x = cell.dataset.x
+    // eslint-disable-next-line no-param-reassign
+    shipDom.dataset.y = cell.dataset.y
   }
 
   markShipCellsAsInvalid(x, y, shipLen) {

@@ -12,12 +12,15 @@ export default class PlayerBoard extends Board {
       this.dragShipIntoCellEventListener.bind(this),
       this.boardLogic.sideLength
     )
-    this.shipyardDom = new PlayerShipyardDom(this.placeShipIfValid.bind(this))
+    this.shipyardDom = new PlayerShipyardDom(
+      this.placeShipIfValid.bind(this),
+      this.relocateShip.bind(this)
+    )
     this.onAllShipsPlaced = onAllShipsPlaced
   }
 
   clearCellsColor() {
-    this.boardDom.clearCellsColor()
+    this.boardDom.clearAllCells()
     this.boardLogic.clearNotShipCells()
   }
 
@@ -50,6 +53,16 @@ export default class PlayerBoard extends Board {
     } catch (e) {
       console.error(e.message)
     }
+  }
+
+  relocateShip([x, y], shipLen, vertical) {
+    const affectedCells = this.boardLogic.removeShip(
+      [Number(x), Number(y)],
+      shipLen,
+      vertical
+    )
+    console.log('affectedCells: ', affectedCells)
+    this.boardDom.clearCells(affectedCells)
   }
 
   showPlayButton() {
