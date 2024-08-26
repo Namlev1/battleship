@@ -80,7 +80,7 @@ export default class BoardLogic {
     this.#throwIfInvalidHorizontally(ship, x, y)
 
     this.#putShipOnBoardHorizontally(ship, x, y, affectedPositions)
-    this.#adjustAdjacentCells(x, ship, y, affectedPositions)
+    this.#adjustAdjacentCellsHorizontally(x, ship, y, affectedPositions)
 
     this.shipCount += 1
     return affectedPositions
@@ -99,17 +99,17 @@ export default class BoardLogic {
       this.#affectCell(affectedPositions, x, y + ship.length)
   }
 
-  #adjustAdjacentCells(x, ship, y, affectedPositions) {
+  #adjustAdjacentCellsHorizontally(x, ship, y, affectedPositions) {
     const start = x === 0 ? x : x - 1
     const end =
       x + ship.length >= this.sideLength ? this.sideLength - 1 : x + ship.length
 
-    if (y > 0) this.#affectTopRow(start, end, affectedPositions, y)
-    if (x > 0) this.#affectLeftCell(affectedPositions, start, y)
+    if (y > 0) this.#affectRow(start, end, affectedPositions, y - 1)
+    if (x > 0) this.#affectCell(affectedPositions, x - 1, y)
     if (x + ship.length < this.sideLength)
-      this.#affectRightCell(affectedPositions, x, ship, y)
+      this.#affectCell(affectedPositions, x + ship.length, y)
     if (y + 1 < this.sideLength)
-      this.#affectBottomRow(start, end, affectedPositions, y)
+      this.#affectRow(start, end, affectedPositions, y + 1)
   }
 
   #putShipOnBoardVertically(ship, x, y, affectedPositions) {
@@ -123,13 +123,6 @@ export default class BoardLogic {
     for (let i = 0; i < ship.length; i++) {
       this.#board[x + i][y] = ship
       affectedPositions.push([x + i, y])
-    }
-  }
-
-  #affectBottomRow(start, end, affectedPositions, y) {
-    for (let i = start; i <= end; i++) {
-      affectedPositions.push([i, y + 1])
-      this.#board[i][y + 1] = this.#SENTRY
     }
   }
 
@@ -147,47 +140,6 @@ export default class BoardLogic {
   #affectRow(start, end, affectedPositions, y) {
     for (let i = start; i <= end; i++) {
       this.#affectCell(affectedPositions, i, y)
-    }
-  }
-
-  #affectLeftColumn(start, end, affectedPositions, x) {
-    for (let i = start; i <= end; i++) {
-      affectedPositions.push([x - 1, i])
-      this.#board[x - 1][i] = this.#SENTRY
-    }
-  }
-
-  #affectRightColumn(start, end, affectedPositions, x) {
-    for (let i = start; i <= end; i++) {
-      affectedPositions.push([x + 1, i])
-      this.#board[x + 1][i] = this.#SENTRY
-    }
-  }
-
-  #affectRightCell(affectedPositions, x, ship, y) {
-    affectedPositions.push([x + ship.length, y])
-    this.#board[x + ship.length][y] = this.#SENTRY
-  }
-
-  #affectLeftCell(affectedPositions, start, y) {
-    affectedPositions.push([start, y])
-    this.#board[start][y] = this.#SENTRY
-  }
-
-  #affectTopCell(affectedPositions, start, x) {
-    affectedPositions.push([x, start])
-    this.#board[x][start] = this.#SENTRY
-  }
-
-  #affectBottomCell(affectedPositions, x, ship, y) {
-    affectedPositions.push([x, y + ship.length])
-    this.#board[x][y + ship.length] = this.#SENTRY
-  }
-
-  #affectTopRow(start, end, affectedPositions, y) {
-    for (let i = start; i <= end; i++) {
-      affectedPositions.push([i, y - 1])
-      this.#board[i][y - 1] = this.#SENTRY
     }
   }
 
@@ -325,10 +277,11 @@ export default class BoardLogic {
   }
 
   removeShipVertically([x, y], shipLen) {
+    console.log('here')
     const affectedPositions = []
     for (let i = 0; i < shipLen; i++) {
       this.#board[x][y + i] = false
-      affectedPositions.push([x + i, y])
+      affectedPositions.push([x, y + i])
     }
     const start = y === 0 ? y : y - 1
     const end =

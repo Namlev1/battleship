@@ -82,31 +82,20 @@ export default class PlayerBoard extends Board {
       isVertical
     )
     this.boardDom.clearCells(affectedCells)
+    console.log(affectedCells)
 
+    let affectedPositions
     try {
-      const affectedPositions = this.boardLogic.place(
-        [x, y],
-        shipId,
-        !isVertical
-      )
-      this.boardDom.markLocked(affectedPositions)
-      this.boardDom.placeShipByCoords([x, y], shipDom)
+      affectedPositions = this.boardLogic.place([x, y], shipId, !isVertical)
       this.shipyardDom.toggleVertical(shipDom)
-      if (this.boardLogic.isAllShipsPlaced()) {
-        this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
-      }
     } catch (e) {
-      console.log(e.message)
-      const affectedPositions = this.boardLogic.place(
-        [x, y],
-        shipId,
-        isVertical
-      )
-      this.boardDom.markLocked(affectedPositions)
-      this.boardDom.placeShipByCoords([x, y], shipDom)
-      if (this.boardLogic.isAllShipsPlaced()) {
-        this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
-      }
+      affectedPositions = this.boardLogic.place([x, y], shipId, isVertical)
+    }
+
+    this.boardDom.markLocked(affectedPositions)
+    this.boardDom.placeShipByCoords([x, y], shipDom)
+    if (this.boardLogic.isAllShipsPlaced()) {
+      this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
     }
   }
 
