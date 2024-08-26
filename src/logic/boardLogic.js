@@ -65,22 +65,38 @@ export default class BoardLogic {
   }
 
   #placeVertically(x, y, ship) {
+    const affectedPositions = []
     this.#throwIfInvalidVertically(ship, x, y)
-    for (let i = 0; i < ship.length; i++) {
-      this.#board[x][y + i] = ship
-    }
+
+    this.#putShipOnBoardVertically(ship, x, y, affectedPositions)
+    this.#adjustAdjacentCellsVertically(x, ship, y, affectedPositions)
+
     this.shipCount += 1
+    return affectedPositions
   }
 
   #placeHorizontally(x, y, ship) {
     const affectedPositions = []
     this.#throwIfInvalidHorizontally(ship, x, y)
 
-    this.#putShipOnBoard(ship, x, y, affectedPositions)
+    this.#putShipOnBoardHorizontally(ship, x, y, affectedPositions)
     this.#adjustAdjacentCells(x, ship, y, affectedPositions)
 
     this.shipCount += 1
     return affectedPositions
+  }
+
+  #adjustAdjacentCellsVertically(x, ship, y, affectedPositions) {
+    const start = y === 0 ? y : y - 1
+    const end =
+      y + ship.length >= this.sideLength ? this.sideLength - 1 : y + ship.length
+
+    if (x > 0) this.#affectColumn(start, end, affectedPositions, x - 1)
+    if (y > 0) this.#affectCell(affectedPositions, x, y - 1)
+    if (x + 1 < this.sideLength)
+      this.#affectColumn(start, end, affectedPositions, x + 1)
+    if (y + ship.length < this.sideLength)
+      this.#affectCell(affectedPositions, x, y + ship.length)
   }
 
   #adjustAdjacentCells(x, ship, y, affectedPositions) {
@@ -96,7 +112,14 @@ export default class BoardLogic {
       this.#affectBottomRow(start, end, affectedPositions, y)
   }
 
-  #putShipOnBoard(ship, x, y, affectedPositions) {
+  #putShipOnBoardVertically(ship, x, y, affectedPositions) {
+    for (let i = 0; i < ship.length; i++) {
+      this.#board[x][y + i] = ship
+      affectedPositions.push([x, y + i])
+    }
+  }
+
+  #putShipOnBoardHorizontally(ship, x, y, affectedPositions) {
     for (let i = 0; i < ship.length; i++) {
       this.#board[x + i][y] = ship
       affectedPositions.push([x + i, y])
@@ -110,6 +133,37 @@ export default class BoardLogic {
     }
   }
 
+  #affectCell(affectedPositions, x, y) {
+    affectedPositions.push([x, y])
+    this.#board[x][y] = this.#SENTRY
+  }
+
+  #affectColumn(start, end, affectedPositions, x) {
+    for (let i = start; i <= end; i++) {
+      this.#affectCell(affectedPositions, x, i)
+    }
+  }
+
+  #affectRow(start, end, affectedPositions, y) {
+    for (let i = start; i <= end; i++) {
+      this.#affectCell(affectedPositions, i, y)
+    }
+  }
+
+  #affectLeftColumn(start, end, affectedPositions, x) {
+    for (let i = start; i <= end; i++) {
+      affectedPositions.push([x - 1, i])
+      this.#board[x - 1][i] = this.#SENTRY
+    }
+  }
+
+  #affectRightColumn(start, end, affectedPositions, x) {
+    for (let i = start; i <= end; i++) {
+      affectedPositions.push([x + 1, i])
+      this.#board[x + 1][i] = this.#SENTRY
+    }
+  }
+
   #affectRightCell(affectedPositions, x, ship, y) {
     affectedPositions.push([x + ship.length, y])
     this.#board[x + ship.length][y] = this.#SENTRY
@@ -120,6 +174,16 @@ export default class BoardLogic {
     this.#board[start][y] = this.#SENTRY
   }
 
+  #affectTopCell(affectedPositions, start, x) {
+    affectedPositions.push([x, start])
+    this.#board[x][start] = this.#SENTRY
+  }
+
+  #affectBottomCell(affectedPositions, x, ship, y) {
+    affectedPositions.push([x, y + ship.length])
+    this.#board[x][y + ship.length] = this.#SENTRY
+  }
+
   #affectTopRow(start, end, affectedPositions, y) {
     for (let i = start; i <= end; i++) {
       affectedPositions.push([i, y - 1])
@@ -127,7 +191,7 @@ export default class BoardLogic {
     }
   }
 
-  place([x, y], id, vertical = false) {
+  place([x, y], id, vertical) {
     const ship = this.#ships.find(findShip => findShip.id === id)
     if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)
@@ -235,6 +299,15 @@ export default class BoardLogic {
     return false
   }
 
+  #checkColumn([start, end], affectedPositions, x) {
+    for (let i = start; i <= end; i++) {
+      if (!this.#hasNeighbourShip([x, i])) {
+        affectedPositions.push([x, i])
+        this.#board[x][i] = false
+      }
+    }
+  }
+
   #checkRow([start, end], affectedPositions, y) {
     for (let i = start; i <= end; i++) {
       if (!this.#hasNeighbourShip([i, y])) {
@@ -251,7 +324,25 @@ export default class BoardLogic {
     }
   }
 
-  removeShipVertically([x, y], shipLen) {}
+  removeShipVertically([x, y], shipLen) {
+    const affectedPositions = []
+    for (let i = 0; i < shipLen; i++) {
+      this.#board[x][y + i] = false
+      affectedPositions.push([x + i, y])
+    }
+    const start = y === 0 ? y : y - 1
+    const end =
+      y + shipLen >= this.sideLength ? this.sideLength - 1 : y + shipLen
+
+    if (x > 0) this.#checkColumn([start, end], affectedPositions, x - 1)
+    if (y > 0) this.#checkCell([x, y - 1], affectedPositions)
+    if (x + 1 < this.sideLength)
+      this.#checkColumn([start, end], affectedPositions, x + 1)
+    if (y + shipLen < this.sideLength)
+      this.#checkCell([x, y + shipLen], affectedPositions)
+
+    return affectedPositions
+  }
 
   removeShipHorizontally([x, y], shipLen) {
     const affectedPositions = []

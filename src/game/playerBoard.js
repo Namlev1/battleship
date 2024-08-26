@@ -14,7 +14,8 @@ export default class PlayerBoard extends Board {
     )
     this.shipyardDom = new PlayerShipyardDom(
       this.placeShipIfValid.bind(this),
-      this.relocateShip.bind(this)
+      this.relocateShip.bind(this),
+      this.changeShipOrientation.bind(this)
     )
     this.onAllShipsPlaced = onAllShipsPlaced
   }
@@ -43,8 +44,13 @@ export default class PlayerBoard extends Board {
       const x = Number(cell.dataset.x)
       const y = Number(cell.dataset.y)
       const shipId = shipDom.firstChild.dataset.shipId.split(' ')[0]
+      const isVertical = shipDom.classList.contains('vertical')
 
-      const affectedPositions = this.boardLogic.place([x, y], shipId)
+      const affectedPositions = this.boardLogic.place(
+        [x, y],
+        shipId,
+        isVertical
+      )
       this.boardDom.markLocked(affectedPositions)
       this.boardDom.placeShip(cell, shipDom)
       if (this.boardLogic.isAllShipsPlaced()) {
@@ -62,6 +68,46 @@ export default class PlayerBoard extends Board {
       vertical
     )
     this.boardDom.clearCells(affectedCells)
+  }
+
+  changeShipOrientation(shipDom) {
+    const x = Number(shipDom.dataset.x)
+    const y = Number(shipDom.dataset.y)
+    const shipId = shipDom.firstChild.dataset.shipId.split(' ')[0]
+    const isVertical = shipDom.classList.contains('vertical')
+
+    const affectedCells = this.boardLogic.removeShip(
+      [Number(x), Number(y)],
+      Number(shipId),
+      isVertical
+    )
+    this.boardDom.clearCells(affectedCells)
+
+    try {
+      const affectedPositions = this.boardLogic.place(
+        [x, y],
+        shipId,
+        !isVertical
+      )
+      this.boardDom.markLocked(affectedPositions)
+      this.boardDom.placeShipByCoords([x, y], shipDom)
+      this.shipyardDom.toggleVertical(shipDom)
+      if (this.boardLogic.isAllShipsPlaced()) {
+        this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
+      }
+    } catch (e) {
+      console.log(e.message)
+      const affectedPositions = this.boardLogic.place(
+        [x, y],
+        shipId,
+        isVertical
+      )
+      this.boardDom.markLocked(affectedPositions)
+      this.boardDom.placeShipByCoords([x, y], shipDom)
+      if (this.boardLogic.isAllShipsPlaced()) {
+        this.shipyardDom.showPlayButton(this.onAllShipsPlaced)
+      }
+    }
   }
 
   showPlayButton() {

@@ -18,6 +18,10 @@ export default class PlayerBoardDom extends BoardDom {
     })
   }
 
+  placeShipByCoords(coords, shipDom) {
+    this.placeShip(this.getCell(coords), shipDom)
+  }
+
   // eslint-disable-next-line class-methods-use-this
   placeShip(cell, shipDom) {
     const rect = cell.getBoundingClientRect()

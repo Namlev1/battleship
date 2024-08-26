@@ -1,12 +1,13 @@
 class ShipyardDom {
   shipyard
 
-  constructor(dropListener, relocateShip) {
+  constructor(dropListener, relocateShip, changeShipOrientation) {
     if (new.target === ShipyardDom) {
       throw new Error('Cannot instantiate an abstract class.')
     }
     this.dropListener = dropListener
     this.relocateShip = relocateShip
+    this.changeShipOrientation = changeShipOrientation
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -17,6 +18,14 @@ class ShipyardDom {
       ship.appendChild(dot)
       count--
     }
+  }
+
+  #resetShip(shipWrap) {
+    shipWrap.classList.remove('locked')
+    shipWrap.classList.remove('vertical')
+    shipWrap.removeAttribute('style')
+    shipWrap.removeAttribute('data-x')
+    shipWrap.removeAttribute('data-y')
   }
 
   #createShip(className, shipId, shipLen) {
@@ -36,15 +45,13 @@ class ShipyardDom {
       if (cell) {
         this.dropListener(shipWrap, cell)
       } else {
-        shipWrap.classList.remove('locked')
-        shipWrap.style.left = '0'
-        shipWrap.style.top = '0'
+        this.#resetShip(shipWrap)
       }
       shipWrap.classList.remove('dragging')
     })
     shipWrap.addEventListener('click', () => {
       if (shipWrap.classList.contains('locked')) {
-        shipWrap.classList.toggle('vertical')
+        this.changeShipOrientation(shipWrap)
       }
     })
 
@@ -98,6 +105,10 @@ class ShipyardDom {
       `[data-ship-id*="${shipId}"]`
     ).parentElement
     shipDom.classList.add('sunk')
+  }
+
+  toggleVertical(shipDom) {
+    shipDom.classList.toggle('vertical')
   }
 }
 

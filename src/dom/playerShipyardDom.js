@@ -1,8 +1,8 @@
 import ShipyardDom from './shipyardDom'
 
 export default class PlayerShipyardDom extends ShipyardDom {
-  constructor(dropListener, relocateShip) {
-    super(dropListener, relocateShip)
+  constructor(dropListener, relocateShip, changeShipOrientation) {
+    super(dropListener, relocateShip, changeShipOrientation)
     this.shipyard = this.createShipyard('SHIPYARD', 'player')
   }
 
