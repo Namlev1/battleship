@@ -108,4 +108,4 @@ const showDialog = (className, text) => {
 
 export const showEnemyWon = () => showDialog('enemy-won', 'Enemy has won!')
 
-export const showPlayerWon = () => showDialog('player-won', 'You has won!')
+export const showPlayerWon = () => showDialog('player-won', 'You have won!')

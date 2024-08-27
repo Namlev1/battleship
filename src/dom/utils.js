@@ -4,6 +4,10 @@ export function getDraggedShipLength() {
   return length
 }
 
+export function getDraggedShipDom() {
+  return document.querySelector('.dragging')
+}
+
 function getCellIndex(cell) {
   const board = cell.parentElement
   const childrenArr = Array.from(board.children)

@@ -29,6 +29,8 @@ export default class Game {
   #start() {
     this.playerBoard.hidePlayButton()
     this.playerBoard.clearCellsColor()
+    this.playerBoard.isGameStarted = true
+    this.enemyBoard.isGameStarted = true
     this.enemyBoard.placeRandomly()
     this.enemyBoard.enable()
     this.playerBoard.disable()

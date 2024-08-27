@@ -1,5 +1,3 @@
-import { getDraggedShipLength } from './utils'
-
 export default class BoardDom {
   board
 
@@ -90,16 +88,14 @@ export default class BoardDom {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  leaveCellEventListener(e) {
-    let cell = e.target
-    const length = getDraggedShipLength()
-    let i = 0
-    while (cell && i < length) {
+  leaveCellEventListener() {
+    const cells = document.querySelectorAll(
+      '.game-panel.player > .board > .cell'
+    )
+    cells.forEach(cell => {
       cell.classList.remove('dragover')
       cell.classList.remove('invalid')
-      cell = cell.nextElementSibling
-      i++
-    }
+    })
   }
 
   markLocked(coords) {

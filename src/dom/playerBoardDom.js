@@ -39,7 +39,7 @@ export default class PlayerBoardDom extends BoardDom {
     shipDom.dataset.y = cell.dataset.y
   }
 
-  markShipCellsAsInvalid(x, y, shipLen) {
+  markShipCellsAsInvalidHorizontally(x, y, shipLen) {
     const start = x
     const end = x + shipLen
     for (let i = start; i < end; i++) {
@@ -47,15 +47,35 @@ export default class PlayerBoardDom extends BoardDom {
     }
   }
 
-  markCellsToTheBorderAsInvalid(x, y) {
+  markShipCellsAsInvalidVertically(x, y, shipLen) {
+    const start = y
+    const end = y + shipLen
+    for (let i = start; i < end; i++) {
+      this.getCell([x, i]).classList.add('invalid')
+    }
+  }
+
+  markCellsToTheRightBorderAsInvalid(x, y) {
     for (let i = x; i < this.sideLength; i++) {
       this.getCell([i, y]).classList.add('invalid')
     }
   }
 
-  markShipCellsAsValid(shipLen, x, y) {
+  markCellsToTheBottomBorderAsInvalid(x, y) {
+    for (let i = y; i < this.sideLength; i++) {
+      this.getCell([x, i]).classList.add('invalid')
+    }
+  }
+
+  markShipCellsAsValidHorizontally(shipLen, x, y) {
     for (let i = 0; i < shipLen; i++) {
       this.getCell([x + i, y]).classList.add('dragover')
+    }
+  }
+
+  markShipCellsAsValidVertically(shipLen, x, y) {
+    for (let i = 0; i < shipLen; i++) {
+      this.getCell([x, y + i]).classList.add('dragover')
     }
   }
 }

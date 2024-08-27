@@ -21,6 +21,7 @@ export default class BoardLogic {
       this.#hitBoard[i] = new Array(this.sideLength)
       for (let j = 0; j < this.sideLength; j++) {
         this.#hitBoard[i][j] = false
+        this.#board[i][j] = false
       }
     }
 
@@ -144,6 +145,7 @@ export default class BoardLogic {
   }
 
   place([x, y], id, vertical) {
+    console.log(this.#board)
     const ship = this.#ships.find(findShip => findShip.id === id)
     if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)
@@ -175,11 +177,26 @@ export default class BoardLogic {
     return x + len <= this.sideLength
   }
 
+  willShipFitVertically(len, y) {
+    return y + len <= this.sideLength
+  }
+
   isPlaceAvailableHorizontally(len, x, y) {
     const start = x
     const end = x + len > this.sideLength ? this.sideLength : x + len
     for (let i = start; i < end; i++) {
       if (this.#isOccupied(i, y)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  isPlaceAvailableVertically(len, x, y) {
+    const start = y
+    const end = y + len > this.sideLength ? this.sideLength : y + len
+    for (let i = start; i < end; i++) {
+      if (this.#isOccupied(x, i)) {
         return false
       }
     }
@@ -277,7 +294,6 @@ export default class BoardLogic {
   }
 
   removeShipVertically([x, y], shipLen) {
-    console.log('here')
     const affectedPositions = []
     for (let i = 0; i < shipLen; i++) {
       this.#board[x][y + i] = false
