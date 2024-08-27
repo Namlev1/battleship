@@ -57,6 +57,9 @@ class ShipyardDom {
       shipWrap.classList.remove('dragging')
     })
     shipWrap.addEventListener('click', () => {
+      if (this.isGameStarted) {
+        return
+      }
       if (shipWrap.classList.contains('locked')) {
         this.changeShipOrientation(shipWrap)
       }
@@ -123,6 +126,7 @@ class ShipyardDom {
     ships.forEach(ship => {
       ship.draggable = false
     })
+    this.isGameStarted = true
   }
 }
 
