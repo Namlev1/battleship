@@ -99,6 +99,9 @@ export default class BoardDom {
   }
 
   markLocked(coords) {
+    if (!coords) {
+      return
+    }
     coords.forEach(position => {
       this.getCell(position).classList.add('locked')
     })

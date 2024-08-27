@@ -8,6 +8,7 @@ class ShipyardDom {
     this.dropListener = dropListener
     this.relocateShip = relocateShip
     this.changeShipOrientation = changeShipOrientation
+    this.isGameStarted = false
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -33,6 +34,9 @@ class ShipyardDom {
     shipWrap.classList.add('ship-wrap', className)
     shipWrap.draggable = true
     shipWrap.addEventListener('dragstart', () => {
+      if (this.isGameStarted) {
+        return
+      }
       if (shipWrap.classList.contains('locked')) {
         const { x, y } = shipWrap.dataset
         const isVertical = shipWrap.classList.contains('vertical')
@@ -41,6 +45,9 @@ class ShipyardDom {
       shipWrap.classList.add('dragging')
     })
     shipWrap.addEventListener('dragend', () => {
+      if (this.isGameStarted) {
+        return
+      }
       const cell = document.querySelector('.cell:hover')
       if (cell) {
         this.dropListener(shipWrap, cell)
@@ -109,6 +116,13 @@ class ShipyardDom {
 
   toggleVertical(shipDom) {
     shipDom.classList.toggle('vertical')
+  }
+
+  disableDragging() {
+    const ships = document.querySelectorAll('.ship-wrap')
+    ships.forEach(ship => {
+      ship.draggable = false
+    })
   }
 }
 

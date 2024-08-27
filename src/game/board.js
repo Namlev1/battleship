@@ -12,11 +12,14 @@ export default class Board {
       throw new Error('Cannot instantiate an abstract class.')
     }
     this.boardLogic = new BoardLogic()
-    this.isGameStarted = false
   }
 
   get sideLength() {
     return this.boardLogic.sideLength
+  }
+
+  startGame() {
+    this.shipyardDom.disableDragging()
   }
 
   isAvailableToHit([x, y]) {

@@ -6,7 +6,6 @@ import { getDraggedShipDom, getDraggedShipLength } from '../dom/utils'
 export default class PlayerBoard extends Board {
   constructor(onAllShipsPlaced) {
     super(onAllShipsPlaced)
-    this.isShowingPlayButton = false
     this.boardName = 'player'
     this.boardDom = new PlayerBoardDom(
       this.boardName,
@@ -97,7 +96,7 @@ export default class PlayerBoard extends Board {
   }
 
   changeShipOrientation(shipDom) {
-    if (this.isGameStarted) {
+    if (this._isGameStarted) {
       return
     }
     const x = Number(shipDom.dataset.x)

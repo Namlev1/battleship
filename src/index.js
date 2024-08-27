@@ -1,4 +1,4 @@
-import { addHeader, addMain } from './dom/createHomePage'
+import { addHeader, addMain } from './dom/mainPageDom'
 import './dom/styles.css'
 import Game from './game/game'
 
