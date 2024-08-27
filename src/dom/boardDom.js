@@ -78,6 +78,14 @@ export default class BoardDom {
     cell.classList.add('hit')
   }
 
+  markCellsMissed(coords) {
+    if (coords) {
+      coords.forEach(position => {
+        this.markMiss(position)
+      })
+    }
+  }
+
   markMiss([x, y]) {
     const cell = this.getCell([x, y])
     cell.classList.add('miss')

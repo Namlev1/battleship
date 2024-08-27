@@ -115,6 +115,7 @@ class ShipyardDom {
       `[data-ship-id*="${shipId}"]`
     ).parentElement
     shipDom.classList.add('sunk')
+    return shipDom.classList.contains('vertical')
   }
 
   // eslint-disable-next-line class-methods-use-this

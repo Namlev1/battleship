@@ -35,7 +35,14 @@ export default class Board {
     if (isHit) {
       this.boardDom.markHit([x, y])
       if (isSunk) {
-        this.shipyardDom.markSunk(shipId)
+        const isVertical = this.shipyardDom.markSunk(shipId)
+        const shipLen = Number.parseInt(shipId, 10)
+        const affectedCells = this.boardLogic.markSurroundingMiss(
+          [x, y],
+          shipLen,
+          isVertical
+        )
+        this.boardDom.markCellsMissed(affectedCells)
       }
     } else {
       this.boardDom.markMiss([x, y])

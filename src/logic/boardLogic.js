@@ -332,11 +332,89 @@ export default class BoardLogic {
     return affectedPositions
   }
 
+  #markCellHit([x, y], affectedPositions) {
+    affectedPositions.push([x, y])
+    this.#hitBoard[x][y] = true
+  }
+
+  #markRowHit([start, end], affectedPositions, y) {
+    for (let i = start; i <= end; i++) {
+      this.#markCellHit([i, y], affectedPositions)
+    }
+  }
+
+  #markColumnHit([start, end], affectedPositions, x) {
+    for (let i = start; i <= end; i++) {
+      this.#markCellHit([x, i], affectedPositions)
+    }
+  }
+
+  markSurroundingMissVertically([x, y], shipLen) {
+    const affectedPositions = []
+    const beginY = this.#findShipYBeginning([x, y])
+    const start = beginY === 0 ? beginY : beginY - 1
+    const end =
+      beginY + shipLen >= this.sideLength
+        ? this.sideLength - 1
+        : beginY + shipLen
+
+    if (x > 0) this.#markColumnHit([start, end], affectedPositions, x - 1)
+    if (beginY > 0) this.#markCellHit([x, beginY - 1], affectedPositions)
+    if (x + 1 < this.sideLength)
+      this.#markColumnHit([start, end], affectedPositions, x + 1)
+    if (beginY + shipLen < this.sideLength)
+      this.#markCellHit([x, beginY + shipLen], affectedPositions)
+
+    return affectedPositions
+  }
+
+  markSurroundingMissHorizontally([x, y], shipLen) {
+    const affectedPositions = []
+    const beginX = this.#findShipXBeginning([x, y])
+    const start = beginX === 0 ? beginX : beginX - 1
+    const end =
+      beginX + shipLen >= this.sideLength
+        ? this.sideLength - 1
+        : beginX + shipLen
+
+    if (y > 0) this.#markRowHit([start, end], affectedPositions, y - 1)
+    if (beginX > 0) this.#markCellHit([start, y], affectedPositions)
+    if (beginX + shipLen < this.sideLength)
+      this.#markCellHit([end, y], affectedPositions)
+    if (y + 1 < this.sideLength)
+      this.#markRowHit([start, end], affectedPositions, y + 1)
+
+    return affectedPositions
+  }
+
+  markSurroundingMiss([x, y], shipLen, isVertical) {
+    if (isVertical) {
+      return this.markSurroundingMissVertically([x, y], shipLen)
+    }
+    return this.markSurroundingMissHorizontally([x, y], shipLen)
+  }
+
   removeShip(coords, shipLen, vertical) {
     this.shipCount -= 1
     if (vertical) {
       return this.removeShipVertically(coords, shipLen)
     }
     return this.removeShipHorizontally(coords, shipLen)
+  }
+
+  #findShipXBeginning([x, y]) {
+    let beginX = x
+    while (beginX > 0 && this.#board[beginX - 1][y]) {
+      beginX--
+    }
+    return beginX
+  }
+
+  #findShipYBeginning([x, y]) {
+    let beginY = y
+    while (beginY > 0 && this.#board[x][beginY - 1]) {
+      beginY--
+    }
+    return beginY
   }
 }
