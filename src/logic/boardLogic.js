@@ -202,22 +202,46 @@ export default class BoardLogic {
     return true
   }
 
+  #placeRandomlyVertically([x, y], ship) {
+    if (this.isPlaceAvailableVertically(ship.length, x, y)) {
+      this.#placeVertically(x, y, ship)
+      return true
+    }
+    return false
+  }
+
+  #placeRandomlyHorizontally([x, y], ship) {
+    if (this.isPlaceAvailableHorizontally(ship.length, x, y)) {
+      this.#placeHorizontally(x, y, ship)
+      return true
+    }
+    return false
+  }
+
+  #placeShipRandomly(ship) {
+    while (true) {
+      const isVertical = Math.random() >= 0.5
+      const x = Math.floor(Math.random() * this.sideLength)
+      const y = Math.floor(Math.random() * this.sideLength)
+      console.log(
+        `Trying to place randomly at [${x}, ${y}], isVertical:${isVertical}`
+      )
+      try {
+        this.place([x, y], ship.id, isVertical)
+        console.log('Placed successfully')
+        return
+      } catch (e) {
+        console.log('Retrying...')
+      }
+    }
+  }
+
   placeRandomly() {
-    for (let i = 0; i < 2; i++) {
-      this.#board[i][0] = this.#ships[0]
-    }
-    for (let i = 0; i < 3; i++) {
-      this.#board[i][2] = this.#ships[1]
-    }
-    for (let i = 0; i < 3; i++) {
-      this.#board[i][4] = this.#ships[2]
-    }
-    for (let i = 0; i < 4; i++) {
-      this.#board[i][6] = this.#ships[3]
-    }
-    for (let i = 0; i < 5; i++) {
-      this.#board[i][8] = this.#ships[4]
-    }
+    this.#placeShipRandomly(this.#ships[4])
+    this.#placeShipRandomly(this.#ships[3])
+    this.#placeShipRandomly(this.#ships[2])
+    this.#placeShipRandomly(this.#ships[1])
+    this.#placeShipRandomly(this.#ships[0])
   }
 
   isAvailableToHit([x, y]) {
