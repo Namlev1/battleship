@@ -145,7 +145,6 @@ export default class BoardLogic {
   }
 
   place([x, y], id, vertical) {
-    console.log(this.#board)
     const ship = this.#ships.find(findShip => findShip.id === id)
     if (vertical) return this.#placeVertically(x, y, ship)
     return this.#placeHorizontally(x, y, ship)

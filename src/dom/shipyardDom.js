@@ -117,6 +117,7 @@ class ShipyardDom {
     shipDom.classList.add('sunk')
   }
 
+  // eslint-disable-next-line class-methods-use-this
   toggleVertical(shipDom) {
     shipDom.classList.toggle('vertical')
   }

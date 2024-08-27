@@ -1,6 +1,7 @@
 import Board from './board'
 import EnemyBoardDom from '../dom/enemyBoardDom'
 import EnemyShipyardDom from '../dom/enemyShipyardDom'
+import { showGraveyard } from '../dom/mainPageDom'
 
 export default class EnemyBoard extends Board {
   constructor(onAttackReceive) {
@@ -15,5 +16,9 @@ export default class EnemyBoard extends Board {
 
   placeRandomly() {
     this.boardLogic.placeRandomly()
+  }
+
+  showGraveyard() {
+    showGraveyard(this.shipyardDom.getDomElement())
   }
 }

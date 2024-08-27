@@ -72,6 +72,11 @@ export const addMain = (playerDom, enemyDom) => {
   main.appendChild(gameGrid)
 }
 
+export const showGraveyard = dom => {
+  const enemyPanel = document.querySelector('.game-panel.enemy')
+  enemyPanel.append(dom)
+}
+
 export const showRoundButton = () => {
   const main = document.querySelector('#main')
   if (!main) return
