@@ -15,7 +15,8 @@ export default class EnemyBoard extends Board {
   }
 
   placeRandomly() {
-    this.boardLogic.placeRandomly()
+    const verticalShips = this.boardLogic.placeRandomly()
+    this.shipyardDom.markShipsAsVertical(verticalShips)
   }
 
   showGraveyard() {

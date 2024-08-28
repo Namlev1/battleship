@@ -218,7 +218,7 @@ export default class BoardLogic {
     return false
   }
 
-  #placeShipRandomly(ship) {
+  #placeShipRandomly(ship, verticalShips) {
     while (true) {
       const isVertical = Math.random() >= 0.5
       const x = Math.floor(Math.random() * this.sideLength)
@@ -229,6 +229,9 @@ export default class BoardLogic {
       try {
         this.place([x, y], ship.id, isVertical)
         console.log('Placed successfully')
+        if (isVertical) {
+          verticalShips.push(ship.id)
+        }
         return
       } catch (e) {
         console.log('Retrying...')
@@ -237,11 +240,13 @@ export default class BoardLogic {
   }
 
   placeRandomly() {
-    this.#placeShipRandomly(this.#ships[4])
-    this.#placeShipRandomly(this.#ships[3])
-    this.#placeShipRandomly(this.#ships[2])
-    this.#placeShipRandomly(this.#ships[1])
-    this.#placeShipRandomly(this.#ships[0])
+    const verticalShips = []
+    this.#placeShipRandomly(this.#ships[4], verticalShips)
+    this.#placeShipRandomly(this.#ships[3], verticalShips)
+    this.#placeShipRandomly(this.#ships[2], verticalShips)
+    this.#placeShipRandomly(this.#ships[1], verticalShips)
+    this.#placeShipRandomly(this.#ships[0], verticalShips)
+    return verticalShips
   }
 
   isAvailableToHit([x, y]) {
