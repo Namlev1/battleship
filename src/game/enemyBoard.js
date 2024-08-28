@@ -22,4 +22,8 @@ export default class EnemyBoard extends Board {
   showGraveyard() {
     showGraveyard(this.shipyardDom.getDomElement())
   }
+
+  clearCellsColor() {
+    this.boardLogic.clearNotShipCells()
+  }
 }

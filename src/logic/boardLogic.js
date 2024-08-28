@@ -223,19 +223,13 @@ export default class BoardLogic {
       const isVertical = Math.random() >= 0.5
       const x = Math.floor(Math.random() * this.sideLength)
       const y = Math.floor(Math.random() * this.sideLength)
-      console.log(
-        `Trying to place randomly at [${x}, ${y}], isVertical:${isVertical}`
-      )
       try {
         this.place([x, y], ship.id, isVertical)
-        console.log('Placed successfully')
         if (isVertical) {
           verticalShips.push(ship.id)
         }
         return
-      } catch (e) {
-        console.log('Retrying...')
-      }
+      } catch (e) {}
     }
   }
 

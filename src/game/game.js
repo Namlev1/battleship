@@ -57,6 +57,7 @@ export default class Game {
     this.playerBoard.disable()
     this.enemyBoard.showGraveyard()
     this.enemyBoard.placeRandomly()
+    this.enemyBoard.clearCellsColor()
     this.enemyBoard.enable()
 
     this.setGameStarted()
