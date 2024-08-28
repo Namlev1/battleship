@@ -16,9 +16,10 @@
 :root {
     --gray-ship: #D1D2DE;
     --gray-dot: #BCBDC8;
+    --locked-cell: blue;
     --gray: #717C96;
     --red: #FF0055;
-    --soft-green: #D4EED1;
+    --soft-blue: #BFDDF9;
     --light-blue: rgba(97, 198, 255, 0.2);
     --blue: rgba(97, 198, 255, 0.4);
     --light-gray: rgba(157, 157, 157, 0.20);
@@ -176,7 +177,7 @@ dialog.enemy-won button {
 }
 
 .player .cell.dragover {
-    background-color: var(--soft-green);
+    background-color: var(--soft-blue);
 }
 
 .cell.miss,
@@ -371,7 +372,7 @@ dialog.enemy-won button {
 }
 
 .cell.locked {
-    background-color: green;
+    background-color: var(--locked-cell);
 }
 
 .round {
